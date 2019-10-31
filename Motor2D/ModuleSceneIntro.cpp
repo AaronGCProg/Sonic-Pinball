@@ -72,16 +72,31 @@ update_status ModuleSceneIntro::Update()
 	SDL_Rect background = { 1, 1, 256, 416 };
 	App->renderer->Blit(map, 0, 0, &background, 0);
 
+	SDL_Rect bouncer = { 445, 389, 26, 26 };
+	App->renderer->Blit(map, 145, 70, &bouncer, 0);
+	App->renderer->Blit(map, 182, 78, &bouncer, 0);
+	App->renderer->Blit(map, 145, 105, &bouncer, 0);
+
 	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame(), 0);
+
+	
 
 	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
 	App->renderer->Blit(map, 0, 0, &backgroundPlus, 0);
+
+	SDL_Rect rail = { 186, 467, 105, 89 };
+	App->renderer->Blit(map, 186, 60, &rail, 0);
+
+	SDL_Rect goPush = { 381, 365, 32, 64 };
+	App->renderer->Blit(map, 230, 344, &goPush, 0);
 
 	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
 	App->renderer->Blit(map, 55, 298, &initialBouncer, 0);
 
 	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
 	App->renderer->Blit(map, 153, 298, &initialBouncer2, 0);
+
+	
 
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
