@@ -4,6 +4,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
+#include "ModuleWindow.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
@@ -12,6 +13,14 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	circle = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
+
+
+	mapMonitor.PushBack({ 0, 509, 48, 55 });
+	mapMonitor.PushBack({ 52, 509, 48, 55 });
+	mapMonitor.PushBack({ 107, 509, 48, 55 });
+	mapMonitor.PushBack({ 52, 509, 48, 55 });
+	mapMonitor.speed = 0.15f;
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -25,12 +34,17 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	// Example Default Resources
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	// Game Resources
+	map = App->textures->Load("pinball/map_spritesheet.png");
+	graphics = App->textures->Load("pinball/general_spritesheet.png");
+
+	// sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	return ret;
 }
@@ -39,13 +53,37 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+	App->textures->Unload(map);
+	App->textures->Unload(graphics);
 
 	return true;
+}
+
+update_status ModuleSceneIntro::PreUpdate()
+{
+
+	return UPDATE_CONTINUE;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	SDL_Rect background = { 1, 1, 256, 416 };
+	App->renderer->Blit(map, 0, 0, &background, 0);
+
+	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame(), 0);
+
+	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
+	App->renderer->Blit(map, 0, 0, &backgroundPlus, 0);
+
+	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
+	App->renderer->Blit(map, 55, 298, &initialBouncer, 0);
+
+	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
+	App->renderer->Blit(map, 153, 298, &initialBouncer2, 0);
+
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -164,6 +202,16 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+	
+
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleSceneIntro::PostUpdate()
+{
+
+	
 
 	return UPDATE_CONTINUE;
 }

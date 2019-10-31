@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "p2List.h"
 #include "p2Point.h"
+#include "Animation.h"
 #include "Globals.h"
 
 class PhysBody;
@@ -13,7 +14,9 @@ public:
 	~ModuleSceneIntro();
 
 	bool Start();
+	update_status PreUpdate();
 	update_status Update();
+	update_status PostUpdate();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
@@ -25,9 +28,14 @@ public:
 	PhysBody* sensor;
 	bool sensed;
 
+	SDL_Texture* map = nullptr;
+	SDL_Texture* graphics = nullptr;
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+
+	Animation mapMonitor;
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
