@@ -101,9 +101,9 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
-	flippers.add(App->physics->CreateFlipper(86,371, FL_RIGHT));
+	flippers.add(App->physics->CreateFlipper(86,371, FL_LEFT));
 	flippers.getLast()->data->listener = this;
-	flippers.add(App->physics->CreateFlipper(140, 375, FL_LEFT));
+	flippers.add(App->physics->CreateFlipper(149, 371, FL_RIGHT));
 	flippers.getLast()->data->listener = this;
 
 
@@ -146,28 +146,30 @@ update_status ModuleSceneIntro::Update()
 	{
 		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
 
-		flippersIterator->data->joint->SetMotorSpeed(10);
+		flippersIterator->data->joint->SetMotorSpeed(30);
 	}
-	else
+	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
 		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
 
-		flippersIterator->data->joint->SetMotorSpeed(-10);
+		flippersIterator->data->joint->SetMotorSpeed(-30);
 	}
+
 
 	//Right Trigger
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
 
-		flippersIterator->data->joint->SetMotorSpeed(-10);
+		flippersIterator->data->joint->SetMotorSpeed(-30);
 	}
-	else
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
 		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
 
-		flippersIterator->data->joint->SetMotorSpeed(10);
+		flippersIterator->data->joint->SetMotorSpeed(30);
 	}
+
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
