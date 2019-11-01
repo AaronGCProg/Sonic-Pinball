@@ -100,9 +100,9 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, 1, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
-	flippers.add(App->physics->CreateFlipper(86,371, FL_RIGHT));
+	flippers.add(App->physics->CreateFlipper(86,371, FL_LEFT));
 	flippers.getLast()->data->listener = this;
-	flippers.add(App->physics->CreateFlipper(149, 371, FL_LEFT));
+	flippers.add(App->physics->CreateFlipper(149, 371, FL_RIGHT));
 	flippers.getLast()->data->listener = this;
 
 

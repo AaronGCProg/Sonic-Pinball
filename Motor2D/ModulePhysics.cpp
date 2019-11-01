@@ -83,7 +83,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 	jointFlipperDef.maxMotorTorque = 7.5f;
 	b2Vec2 mesure(24, 5);
 
-	if (dir == 2)
+	if (dir == 1)
 	{
 		CircleFlipper = CreateCircle(x, y, 4, 1)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
@@ -96,7 +96,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 		jointFlipperDef.lowerAngle = -25 * DEGTORAD;
 		jointFlipperDef.upperAngle = 45 * DEGTORAD;
 	}
-	else if (dir == 1)
+	else if (dir == 2)
 	{
 
 		CircleFlipper = CreateCircle(x, y, 4, 1)->body;
