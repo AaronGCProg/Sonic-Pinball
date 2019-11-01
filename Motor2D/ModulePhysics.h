@@ -20,6 +20,18 @@ enum flipper_direction
 	FL_RIGHT,
 };
 
+enum COLLIDER_TYPE
+{
+	COLLIDER_GENERAL = -1,
+	COLLIDER_BALL, 
+	COLLIDER_WALL,
+	COLLIDER_BOUNCER,
+	COLLIDER_TRIGGER,
+
+
+	COLLIDER_MAX
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -35,6 +47,7 @@ public:
 public:
 	int width, height;
 	b2Body* body;
+	COLLIDER_TYPE colType = COLLIDER_GENERAL;
 	Module* listener;
 };
 
@@ -62,10 +75,10 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType = COLLIDER_GENERAL);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL);
+	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir);
 
 	p2List<flipperJoint*> flipperJoints;

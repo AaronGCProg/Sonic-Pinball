@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 
+
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -27,6 +28,9 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+
+
+
 	return UPDATE_CONTINUE;
 }
 

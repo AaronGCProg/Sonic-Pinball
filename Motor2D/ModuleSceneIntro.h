@@ -18,13 +18,23 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	bool CleanUp();
+
+
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void mapBlit();
+	
 
 public:
-	p2List<PhysBody*> circles;
+
+	// Official 
+	p2List<PhysBody*> playerBall;
+	p2List<PhysBody*> map_col;
+
+	// Testing
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	p2List<PhysBody*> flippers;
+
 
 	PhysBody* sensor;
 	bool sensed;

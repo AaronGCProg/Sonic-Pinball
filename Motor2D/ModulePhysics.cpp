@@ -126,7 +126,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 
 
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -139,6 +139,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = 0.2f;
 
 	b->CreateFixture(&fixture);
 
@@ -146,11 +147,12 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -171,11 +173,12 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -198,14 +201,20 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool staticObject, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+
+	if (!staticObject)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
+
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -232,6 +241,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+	pbody->colType = colType;
 
 	return pbody;
 }
