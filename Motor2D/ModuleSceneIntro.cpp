@@ -125,34 +125,7 @@ update_status ModuleSceneIntro::PreUpdate()
 update_status ModuleSceneIntro::Update()
 {
 
-	SDL_Rect background = { 1, 1, 256, 416 };
-	App->renderer->Blit(map, 0, 0, &background, 0);
-
-	SDL_Rect bouncer = { 445, 389, 26, 26 };
-	App->renderer->Blit(map, 145, 70, &bouncer, 0);
-	App->renderer->Blit(map, 182, 78, &bouncer, 0);
-	App->renderer->Blit(map, 145, 105, &bouncer, 0);
-
-	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame(), 0);
-
-	
-
-	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
-	App->renderer->Blit(map, 0, 0, &backgroundPlus, 0);
-
-	SDL_Rect rail = { 186, 467, 105, 89 };
-	App->renderer->Blit(map, 186, 60, &rail, 0);
-
-	SDL_Rect goPush = { 381, 365, 32, 64 };
-	App->renderer->Blit(map, 230, 344, &goPush, 0);
-
-	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
-	App->renderer->Blit(map, 55, 298, &initialBouncer, 0);
-
-	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
-	App->renderer->Blit(map, 153, 298, &initialBouncer2, 0);
-
-	
+	mapBlit();
 
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -162,10 +135,11 @@ update_status ModuleSceneIntro::Update()
 		ray.y = App->input->GetMouseY();
 	}
 
+	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
-		circles.getLast()->data->listener = this;
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
+		playerBall.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
@@ -226,15 +200,15 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	p2List_item<PhysBody*>* c = playerBall.getFirst();
 
 	while(c != NULL)
 	{
 		int x, y;
 		SDL_Rect ball = { 273, 405, 14, 14 };
 		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(map, x, y, &ball, 1.0f, c->data->GetRotation());
+		//if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
+		App->renderer->Blit(map, x, y, &ball, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
@@ -277,8 +251,6 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
-	
-
 	return UPDATE_CONTINUE;
 }
 
@@ -296,8 +268,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	/*
-	if(bodyA)
+
+	/*if(bodyA)
 	{
 		bodyA->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
@@ -308,4 +280,37 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyB->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
 	}*/
+}
+
+void ModuleSceneIntro::mapBlit() 
+{
+
+	SDL_Rect background = { 1, 1, 256, 416 };
+	App->renderer->Blit(map, 0, 0, &background, 0);
+
+	SDL_Rect bouncer = { 445, 389, 26, 26 };
+	App->renderer->Blit(map, 145, 70, &bouncer, 0);
+	App->renderer->Blit(map, 182, 78, &bouncer, 0);
+	App->renderer->Blit(map, 145, 105, &bouncer, 0);
+
+	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame(), 0);
+
+
+
+	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
+	App->renderer->Blit(map, 0, 0, &backgroundPlus, 0);
+
+	SDL_Rect rail = { 186, 467, 105, 89 };
+	App->renderer->Blit(map, 186, 60, &rail, 0);
+
+	SDL_Rect goPush = { 381, 365, 32, 64 };
+	App->renderer->Blit(map, 230, 344, &goPush, 0);
+
+	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
+	App->renderer->Blit(map, 55, 298, &initialBouncer, 0);
+
+	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
+	App->renderer->Blit(map, 153, 298, &initialBouncer2, 0);
+
+
 }
