@@ -39,11 +39,11 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	fontScore = App->renderer->LoadFont("pinball/score.png", "0123456789%,", 1);
 
 	// Game Resources
 	map = App->textures->Load("pinball/map_spritesheet.png");
 	graphics = App->textures->Load("pinball/general_spritesheet.png");
+	fontScore = App->renderer->LoadFont("pinball/score.png", "0123456789%,", 1);
 
 
 	// Map Collisions 
@@ -331,6 +331,12 @@ void ModuleSceneIntro::mapBlit()
 
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
+
+	SDL_Rect flipperL = { 437, 365, 29, 14 };
+	App->renderer->Blit(map, 80, 365, &flipperL);
+
+	SDL_Rect flipperR = { 475, 365, 29, 14 };
+	App->renderer->Blit(map, 125, 365, &flipperR);
 
 	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
 	App->renderer->Blit(map, 55, 298, &initialBouncer);
