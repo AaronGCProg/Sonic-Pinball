@@ -46,6 +46,62 @@ bool ModuleSceneIntro::Start()
 
 	// sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+
+	// Map Collisions (Se debe pasar a función)
+
+	// Pivot 0, 0
+	int map_spritesheet[94] = {
+		23, 49,
+		52, 22,
+		86, 14,
+		125, 14,
+		147, 17,
+		178, 22,
+		204, 30,
+		227, 42,
+		225, 33,
+		216, 19,
+		219, 10,
+		225, 8,
+		235, 10,
+		245, 26,
+		248, 41,
+		249, 47,
+		229, 153,
+		212, 187,
+		219, 193,
+		202, 207,
+		200, 212,
+		197, 216,
+		200, 274,
+		210, 276,
+		225, 272,
+		225, 331,
+		153, 365,
+		153, 373,
+		144, 377,
+		144, 400,
+		144, 443,
+		90, 442,
+		90, 377,
+		81, 372,
+		81, 366,
+		44, 347,
+		35, 343,
+		35, 298,
+		37, 271,
+		13, 239,
+		13, 229,
+		24, 225,
+		35, 236,
+		34, 194,
+		25, 176,
+		13, 130,
+		10, 85
+	};
+
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true));
+
 	return ret;
 }
 
@@ -108,7 +164,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
 		circles.getLast()->data->listener = this;
 	}
 
@@ -158,6 +214,8 @@ update_status ModuleSceneIntro::Update()
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 
+	
+
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -173,9 +231,10 @@ update_status ModuleSceneIntro::Update()
 	while(c != NULL)
 	{
 		int x, y;
+		SDL_Rect ball = { 273, 405, 14, 14 };
 		c->data->GetPosition(x, y);
 		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+			App->renderer->Blit(map, x, y, &ball, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
