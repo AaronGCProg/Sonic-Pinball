@@ -97,7 +97,7 @@ bool ModuleSceneIntro::Start()
 		10, 85
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL));
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, 1, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
 	flippers.add(App->physics->CreateFlipper(86,371, FL_RIGHT));
@@ -169,13 +169,13 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, 1, COLLIDER_BALL, 0x0001, 0x0002));
 		playerBall.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50, 1));
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
@@ -216,7 +216,7 @@ update_status ModuleSceneIntro::Update()
 			30, 62
 		};
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64, 1));
 	}
 
 	
@@ -294,9 +294,8 @@ update_status ModuleSceneIntro::PostUpdate()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
 
-
+	
 	if(bodyB->colType != COLLIDER_WALL)
 		App->audio->PlayFx(bonus_fx);
 
