@@ -100,7 +100,7 @@ bool ModuleSceneIntro::Start()
 		10, 85
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true));
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL));
 
 	return ret;
 }
@@ -266,7 +266,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
+
+	if(bodyB->colType != COLLIDER_WALL)
+		App->audio->PlayFx(bonus_fx);
+
+
+	
+
+	
 
 
 	/*if(bodyA)

@@ -75,7 +75,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -96,11 +96,12 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -121,11 +122,12 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -148,11 +150,12 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+	pbody->colType = colType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool staticObject)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool staticObject, COLLIDER_TYPE colType)
 {
 	b2BodyDef body;
 
@@ -187,6 +190,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool s
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+	pbody->colType = colType;
 
 	return pbody;
 }
