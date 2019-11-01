@@ -81,12 +81,12 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 	b2RevoluteJointDef jointFlipperDef;
 	jointFlipperDef.enableMotor = true;
 	jointFlipperDef.maxMotorTorque = 75.0f;
-	b2Vec2 mesure(40, 5);
+	b2Vec2 mesure(20, 5);
 	if (dir == 2)
 	{
 		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x + 20, y, mesure.x, mesure.y)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x + 10, y, mesure.x, mesure.y)->body;
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 
 
@@ -99,7 +99,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 
 		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x - 20, y, mesure.x, mesure.y)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x - 10, y, mesure.x, mesure.y)->body;
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 
 		jointFlipperDef.enableLimit = true;
