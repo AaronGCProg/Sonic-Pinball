@@ -46,6 +46,13 @@ bool ModuleSceneIntro::Start()
 
 	// sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+
+	flippers.add(App->physics->CreateFlipper( 15,100, FL_RIGHT));
+	flippers.getLast()->data->listener = this;
+	flippers.add(App->physics->CreateFlipper(100, 100, FL_LEFT));
+	flippers.getLast()->data->listener = this;
+
+
 	return ret;
 }
 
@@ -104,6 +111,35 @@ update_status ModuleSceneIntro::Update()
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
+	}
+
+
+	//Left Trigger
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
+
+		flippersIterator->data->joint->SetMotorSpeed(100);
+	}
+	else
+	{
+		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
+
+		flippersIterator->data->joint->SetMotorSpeed(-10);
+	}
+
+	//Right Trigger
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
+
+		flippersIterator->data->joint->SetMotorSpeed(-100);
+	}
+	else
+	{
+		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
+
+		flippersIterator->data->joint->SetMotorSpeed(10);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)

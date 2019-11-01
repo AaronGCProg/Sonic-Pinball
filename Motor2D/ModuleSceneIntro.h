@@ -24,6 +24,7 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+	p2List<PhysBody*> flippers;
 
 	PhysBody* sensor;
 	bool sensed;

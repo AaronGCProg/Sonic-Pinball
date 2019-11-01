@@ -74,6 +74,57 @@ update_status ModulePhysics::PreUpdate()
 
 	return UPDATE_CONTINUE;
 }
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
+{
+	b2Body* CircleFlipper = nullptr;;
+	b2Body* rectangleFlipper = nullptr;
+	b2RevoluteJointDef jointFlipperDef;
+	jointFlipperDef.enableMotor = true;
+	jointFlipperDef.maxMotorTorque = 75.0f;
+	b2Vec2 mesure(40, 5);
+	if (dir == 2)
+	{
+		CircleFlipper = CreateCircle(x, y, 4)->body;
+		CircleFlipper->SetType(b2BodyType::b2_staticBody);
+		rectangleFlipper = App->physics->CreateRectangle(x + 20, y, mesure.x, mesure.y)->body;
+		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
+
+
+		jointFlipperDef.enableLimit = true;
+		jointFlipperDef.lowerAngle = -25 * DEGTORAD;
+		jointFlipperDef.upperAngle = 45 * DEGTORAD;
+	}
+	else if (dir == 1)
+	{
+
+		CircleFlipper = CreateCircle(x, y, 4)->body;
+		CircleFlipper->SetType(b2BodyType::b2_staticBody);
+		rectangleFlipper = App->physics->CreateRectangle(x - 20, y, mesure.x, mesure.y)->body;
+		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
+
+		jointFlipperDef.enableLimit = true;
+		jointFlipperDef.lowerAngle = -45 * DEGTORAD;
+		jointFlipperDef.upperAngle = 25 * DEGTORAD;
+	}
+
+	jointFlipperDef.Initialize(rectangleFlipper, CircleFlipper, CircleFlipper->GetWorldCenter());
+
+	b2RevoluteJoint* joinFlipper;
+	joinFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&jointFlipperDef);
+
+	flipperJoint* flipperToCreate = new flipperJoint(joinFlipper, dir);
+
+	flipperJoints.add(flipperToCreate);
+
+	PhysBody* newBody = new PhysBody();;
+	newBody->body = rectangleFlipper;
+	rectangleFlipper->SetUserData(newBody);
+
+
+	return newBody;
+}
+
+
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
@@ -291,24 +342,8 @@ update_status ModulePhysics::PostUpdate()
 				
 				}
 			}
-		
-
-
-			
 		}
 	}
-
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
-
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
-
-	// TODO 4: If the player releases the mouse button, destroy the joint
-
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint != nullptr)
 		{
 			mouse_joint->SetTarget(mouse_position);

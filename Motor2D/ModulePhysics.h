@@ -11,6 +11,14 @@
 
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
+ 
+enum flipper_direction
+{
+	FL_NONE,
+
+	FL_LEFT,
+	FL_RIGHT,
+};
 
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
@@ -30,6 +38,18 @@ public:
 	Module* listener;
 };
 
+struct flipperJoint
+{
+
+	flipperJoint(b2RevoluteJoint* revJoint, flipper_direction direction) :
+		joint(revJoint),
+		dir(direction)
+	{};
+
+	b2RevoluteJoint* joint;
+	flipper_direction dir;
+};
+
 // Module --------------------------------------
 class ModulePhysics : public Module, public b2ContactListener // TODO
 {
@@ -46,6 +66,10 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateFlipper(int x, int y, flipper_direction dir);
+
+	p2List<flipperJoint*> flipperJoints;
+
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
