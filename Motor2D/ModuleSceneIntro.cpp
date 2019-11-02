@@ -44,7 +44,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	blackSquirrel.PushBack({ 660, 389, 13, 18 });
 	blackSquirrel.speed = 0.15f;
 
-	blueBird.PushBack({ 666, 443, 22, 26 });
+	blueBird.PushBack({ 676, 443, 22, 26 });
 	blueBird.PushBack({ 701, 443, 19, 26 });
 	blueBird.PushBack({ 723, 443, 19, 26 });
 	blueBird.speed = 0.15f;
@@ -61,7 +61,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	blueCupoSleeping.PushBack({ 640, 109, 28, 28 });
 	blueCupoSleeping.PushBack({ 671, 108, 26, 29 });
 	blueCupoSleeping.PushBack({ 700, 108, 26, 29 });
-	blueCupoSleeping.speed = 0.15f;
+	blueCupoSleeping.speed = 0.01f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -532,7 +532,13 @@ void ModuleSceneIntro::mapBlit()
 
 	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame());
 
+	App->renderer->Blit(graphics, 10, 365, &brownBambi.GetCurrentFrame());
+	App->renderer->Blit(graphics, 50, 375, &blueBird.GetCurrentFrame());
+	App->renderer->Blit(graphics, 30, 385, &blackSquirrel.GetCurrentFrame());
 
+	App->renderer->Blit(graphics, 160, 385, &pinkBunny.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
+	App->renderer->Blit(graphics, 195, 370, &blueCupoSleeping.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
+	App->renderer->Blit(graphics, 180, 380, &blueCupoSit.GetCurrentFrame());
 
 	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
 	App->renderer->Blit(map, 0, 0, &backgroundPlus);
