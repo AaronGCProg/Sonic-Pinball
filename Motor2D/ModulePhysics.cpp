@@ -133,24 +133,21 @@ b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, COLLIDER_TYPE c
 	int launcherRect[8] = {
 	x, y,
 	x+12, y,
-	x+12, y-10,
-	x, y-10
+	x+12, y-17,
+	x, y-17
 	};
 
-	b2Body* ballLauncher = App->physics->CreateChain(0, 0, launcherRect,8,true, colType, mask, cat)->body;
+	b2Body* ballLauncher = App->physics->CreateChain(0, 0, launcherRect,8,false, colType, mask, cat)->body;
 
 	b2PrismaticJointDef jointBallShDef;
-	jointBallShDef.Initialize(App->physics->ground, ballLauncher, ground->GetWorldCenter(), { 0.0f, 1.0f });
+	jointBallShDef.Initialize(ground, ballLauncher, ground->GetWorldCenter(), { 0.0f, 1.0f });
 
 	jointBallShDef.enableMotor = true;
-	jointBallShDef.maxMotorForce = 750.0f;
+	jointBallShDef.maxMotorForce = 100.0f;
 
 	jointBallShDef.enableLimit = true;
-	jointBallShDef.lowerTranslation = PIXEL_TO_METERS(25);
-	jointBallShDef.upperTranslation = PIXEL_TO_METERS(40);
-
-
-
+	jointBallShDef.lowerTranslation = 0.0f;
+	jointBallShDef.upperTranslation = 0.5f;
 
 	b2PrismaticJoint* BSHJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&jointBallShDef);
 
