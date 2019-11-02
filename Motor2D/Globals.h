@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include <stdio.h>
+#include "Box2D/Box2D/Box2D.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -18,6 +19,14 @@ enum update_status
 	UPDATE_CONTINUE = 1,
 	UPDATE_STOP,
 	UPDATE_ERROR
+};
+
+enum flipper_direction
+{
+	FL_NONE,
+
+	FL_LEFT,
+	FL_RIGHT,
 };
 
 // Configuration -----------

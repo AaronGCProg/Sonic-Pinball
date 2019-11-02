@@ -74,14 +74,13 @@ update_status ModulePhysics::PreUpdate()
 
 	return UPDATE_CONTINUE;
 }
-PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure)
 {
 	b2Body* CircleFlipper = nullptr;;
 	b2Body* rectangleFlipper = nullptr;
 	b2RevoluteJointDef jointFlipperDef;
 	jointFlipperDef.enableMotor = true;
 	jointFlipperDef.maxMotorTorque = 7.5f;
-	b2Vec2 mesure(24, 5);
 
 	if (dir == 1)
 	{
@@ -114,44 +113,26 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 
 	jointFlipperDef.Initialize(rectangleFlipper, CircleFlipper, CircleFlipper->GetWorldCenter());
 
-	b2RevoluteJoint* joinFlipper;
-	joinFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&jointFlipperDef);
+	b2RevoluteJoint* joint = nullptr;
+	joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&jointFlipperDef);
 
-	flipperJoint* flipperToCreate = new flipperJoint(joinFlipper, dir);
-	flipperJoints.add(flipperToCreate);
+	flipperJoints.add(joint);
 
 	PhysBody* newBody = new PhysBody();;
 	newBody->body = rectangleFlipper;
+	newBody->width = mesure.x;
+	newBody->height = mesure.y;
 	rectangleFlipper->SetUserData(newBody);
-
 
 	return newBody;
 }
 
 
-PhysBody* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
+b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
 {
-	b2Body* CircleFlipper = nullptr;;
-	b2Body* rectangleFlipper = nullptr;
-	b2RevoluteJointDef jointFlipperDef;
-	jointFlipperDef.enableMotor = true;
-	jointFlipperDef.maxMotorTorque = 7.5f;
 
 
-	jointFlipperDef.Initialize(rectangleFlipper, CircleFlipper, CircleFlipper->GetWorldCenter());
 
-	b2RevoluteJoint* joinFlipper;
-	joinFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&jointFlipperDef);
-
-	flipperJoint* flipperToCreate = new flipperJoint(joinFlipper, dir);
-	flipperJoints.add(flipperToCreate);
-
-	PhysBody* newBody = new PhysBody();;
-	newBody->body = rectangleFlipper;
-	rectangleFlipper->SetUserData(newBody);
-
-
-	return newBody;
 }
 
 

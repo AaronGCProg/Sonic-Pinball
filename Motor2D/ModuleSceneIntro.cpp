@@ -101,14 +101,20 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
+
 	bumpers.add(App->physics->CreateCircle(158, 80, 12, true, COLLIDER_BALL, 0x0001, 0x0002));
 	bumpers.getLast()->data->listener = this;
 
 
-	flippers.add(App->physics->CreateFlipper(86,371, FL_LEFT));
-	flippers.getLast()->data->listener = this;
-	flippers.add(App->physics->CreateFlipper(149, 371, FL_RIGHT));
-	flippers.getLast()->data->listener = this;
+	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6});
+	BleftFlipper->listener = this;
+	JleftFlipper = App->physics->flipperJoints.getLast()->data;
+
+	BrightFlipper = App->physics->CreateFlipper(149, 371, FL_RIGHT, { 24,5 });
+	BrightFlipper->listener = this;
+	JrightFlipper = App->physics->flipperJoints.getLast()->data;
+
+
 
 
 	return ret;
@@ -148,30 +154,23 @@ update_status ModuleSceneIntro::Update()
 	//Left Trigger
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
+		JleftFlipper->SetMotorSpeed(30);
 
-		flippersIterator->data->joint->SetMotorSpeed(30);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
-		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getFirst();
-
-		flippersIterator->data->joint->SetMotorSpeed(-30);
+		JleftFlipper->SetMotorSpeed(-30);
 	}
 
 
 	//Right Trigger
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
-
-		flippersIterator->data->joint->SetMotorSpeed(-30);
+		JrightFlipper->SetMotorSpeed(-30);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
-		p2List_item<flipperJoint*>* flippersIterator = App->physics->flipperJoints.getLast();
-
-		flippersIterator->data->joint->SetMotorSpeed(30);
+		JrightFlipper->SetMotorSpeed(30);
 	}
 
 	
@@ -336,11 +335,16 @@ void ModuleSceneIntro::mapBlit()
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
 
-	SDL_Rect flipperL = { 437, 365, 29, 14 };
-	App->renderer->Blit(map, 80, 365, &flipperL);
+	SDL_Rect flipper = { 436, 368, 31, 12 };
 
-	SDL_Rect flipperR = { 475, 365, 29, 14 };
-	App->renderer->Blit(map, 125, 365, &flipperR);
+	iPoint LFpos = { METERS_TO_PIXELS(BleftFlipper->body->GetPosition().x),METERS_TO_PIXELS(BleftFlipper->body->GetPosition().y) };
+	iPoint LFOff = { BleftFlipper->width, BleftFlipper->height };
+	App->renderer->Blit(map, LFpos.x - LFOff.x/2 - LFOff.y, LFpos.y - LFOff.y, &flipper,1.0f, RADTODEG * BleftFlipper->body->GetAngle());
+
+	iPoint rightFlipPos = { METERS_TO_PIXELS(BrightFlipper->body->GetPosition().x),METERS_TO_PIXELS(BrightFlipper->body->GetPosition().y) };
+	iPoint RFOff = { BrightFlipper->width, BrightFlipper->height };
+	App->renderer->Blit(map, rightFlipPos.x - RFOff.x / 2, rightFlipPos.y - RFOff.y, &flipper, 1.0f, RADTODEG * BrightFlipper->body->GetAngle(), INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
+
 
 	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
 	App->renderer->Blit(map, 55, 298, &initialBouncer);

@@ -36,6 +36,12 @@ public:
 	p2List<PhysBody*> ricks;
 	p2List<PhysBody*> flippers;
 
+	PhysBody* BleftFlipper;
+	PhysBody* BrightFlipper;
+
+	b2RevoluteJoint* JleftFlipper;
+	b2RevoluteJoint* JrightFlipper;
+
 
 	PhysBody* sensor;
 	bool sensed;
