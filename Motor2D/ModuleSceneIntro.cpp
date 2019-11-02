@@ -97,6 +97,61 @@ bool ModuleSceneIntro::Start()
 		13, 130,
 		10, 85
 	};
+	int initialBumpers1[6] = {
+		58, 300,
+		58, 328,
+		76, 339
+	};
+	int initialBumpers2[6] = {
+		175, 300,
+		175, 328,
+		156, 337
+	};
+	int aloneBumper[16] = {
+		126, 75,
+		121, 53,
+		113, 40,
+		107, 36,
+		115, 34,
+		135, 36,
+		129, 41,
+		129, 95
+	};
+	int genericColMap1[36] = {
+		40, 60,
+		58, 124,
+		58, 108,
+		64, 101,
+		71, 101,
+		77, 105,
+		78, 82,
+		63, 74,
+		56, 68,
+		55, 57,
+		66, 54,
+		79, 57,
+		88, 64,
+		92, 69,
+		100, 62,
+		90, 48,
+		76, 39,
+		56, 43
+	};
+	int genericColMap2[18] = {
+		91, 166,
+		99, 160,
+		109, 163,
+		111, 175,
+		116, 176,
+		115, 163,
+		107, 157,
+		98, 156,
+		88, 161
+	};
+
+
+
+
 
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, REGULAR_MAP, BALL));
 
@@ -163,7 +218,12 @@ bool ModuleSceneIntro::Start()
 
 
 
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 36, true, COLLIDER_WALL, 0x0002, 0x0001));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, 0x0002, 0x0001));
 
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 
 	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
 	bumpers.getLast()->data->listener = this;
@@ -310,67 +370,7 @@ update_status ModuleSceneIntro::Update()
 
 	
 
-	// Prepare for raycast ------------------------------------------------------
 	
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-	int ray_hit = ray.DistanceTo(mouse);
-
-	fVector normal(0.0f, 0.0f);
-
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = playerBall.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		SDL_Rect ball = { 273, 405, 14, 14 };
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(map, x-1, y-1, &ball, 1.0f, c->data->GetRotation());
-		
-		c = c->next;	
-	}
-
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if(ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if(hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	// ray -----------------
-	if(ray_on == true)
-	{
-		fVector destination(mouse.x-ray.x, mouse.y-ray.y);
-		destination.Normalize();
-		destination *= ray_hit;
-
-		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
-
-		if(normal.x != 0.0f)
-			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
-	}
-
 
 	sprintf_s(actualScore_text, 10, "%7d", actualScore);
 	App->renderer->BlitText((SCREEN_WIDTH / 2) - 15, 40, 0, actualScore_text);
@@ -408,13 +408,73 @@ void ModuleSceneIntro::mapBlit()
 
 	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame());
 
+	// Prepare for raycast ------------------------------------------------------
+
+	iPoint mouse;
+	mouse.x = App->input->GetMouseX();
+	mouse.y = App->input->GetMouseY();
+	int ray_hit = ray.DistanceTo(mouse);
+
+	fVector normal(0.0f, 0.0f);
+
+	// All draw functions ------------------------------------------------------
+	p2List_item<PhysBody*>* c = playerBall.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		SDL_Rect ball = { 273, 405, 14, 14 };
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, c->data->GetRotation());
+
+		c = c->next;
+	}
+
+	c = boxes.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
+		if (ray_on)
+		{
+			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
+			if (hit >= 0)
+				ray_hit = hit;
+		}
+		c = c->next;
+	}
+
+	c = ricks.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	// ray -----------------
+	if (ray_on == true)
+	{
+		fVector destination(mouse.x - ray.x, mouse.y - ray.y);
+		destination.Normalize();
+		destination *= ray_hit;
+
+		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
+
+		if (normal.x != 0.0f)
+			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+	}
 
 
 	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
 	App->renderer->Blit(map, 0, 0, &backgroundPlus);
 
-	SDL_Rect rail = { 186, 467, 105, 89 };
-	App->renderer->Blit(map, 186, 60, &rail);
+	SDL_Rect rail = { 166, 467, 105, 89 };
+	App->renderer->Blit(map, 142, 62, &rail);
 
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
