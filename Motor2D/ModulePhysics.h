@@ -12,13 +12,7 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
  
-enum flipper_direction
-{
-	FL_NONE,
 
-	FL_LEFT,
-	FL_RIGHT,
-};
 
 enum COLLIDER_TYPE
 {
@@ -51,17 +45,7 @@ public:
 	Module* listener;
 };
 
-struct flipperJoint
-{
 
-	flipperJoint(b2RevoluteJoint* revJoint, flipper_direction direction) :
-		joint(revJoint),
-		dir(direction)
-	{};
-
-	b2RevoluteJoint* joint;
-	flipper_direction dir;
-};
 
 // Module --------------------------------------
 class ModulePhysics : public Module, public b2ContactListener // TODO
@@ -79,12 +63,12 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
-	PhysBody* CreateFlipper(int x, int y, flipper_direction dir);
+	PhysBody* CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure);
 	PhysBody* CreateBumper(int x, int y, flipper_direction dir);
-	PhysBody* CreateBallShooter(int x, int y, flipper_direction dir);
+	b2PrismaticJoint* CreateBallShooter(int x, int y, flipper_direction dir);
 
 
-	p2List<flipperJoint*> flipperJoints;
+	p2List<b2RevoluteJoint*> flipperJoints;
 
 
 	// b2ContactListener ---
