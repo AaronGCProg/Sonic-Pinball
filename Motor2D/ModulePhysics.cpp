@@ -87,7 +87,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 	{
 		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = -40.0f;
@@ -102,7 +102,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 
 		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = 40.0f;
@@ -155,10 +155,15 @@ PhysBody* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
 }
 
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+
+	if (!staticObject)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
+
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -183,10 +188,15 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE co
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+
+	if (!staticObject)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
+
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

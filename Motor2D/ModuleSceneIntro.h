@@ -29,6 +29,7 @@ public:
 	// Official 
 	p2List<PhysBody*> playerBall;
 	p2List<PhysBody*> map_col;
+	p2List<PhysBody*> bumpers;
 
 	// Testing
 	p2List<PhysBody*> boxes;
