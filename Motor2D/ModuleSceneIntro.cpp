@@ -101,6 +101,11 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
+
+	bumpers.add(App->physics->CreateCircle(158, 80, 12, true, COLLIDER_BALL, 0x0001, 0x0002));
+	bumpers.getLast()->data->listener = this;
+
+
 	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6});
 	BleftFlipper->listener = this;
 	JleftFlipper = App->physics->flipperJoints.getLast()->data;
@@ -108,6 +113,7 @@ bool ModuleSceneIntro::Start()
 	BrightFlipper = App->physics->CreateFlipper(149, 371, FL_RIGHT, { 24,5 });
 	BrightFlipper->listener = this;
 	JrightFlipper = App->physics->flipperJoints.getLast()->data;
+
 
 
 
@@ -170,7 +176,7 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, COLLIDER_BALL, 0x0001, 0x0002));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, false, COLLIDER_BALL, 0x0001, 0x0002));
 		playerBall.getLast()->data->listener = this;
 	}
 
