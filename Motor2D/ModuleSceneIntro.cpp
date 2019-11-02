@@ -517,7 +517,7 @@ update_status ModuleSceneIntro::PostUpdate()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyB->colType == COLLIDER_BOUNCER) 
-		bodyA->body->GetContactList()->contact->SetRestitution(2.2f);
+		bodyA->body->GetContactList()->contact->SetRestitution(1.3f);
 
 
 	if (bodyB->colType == COLLIDER_BALLTORAIL)
