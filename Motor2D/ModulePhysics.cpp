@@ -128,12 +128,6 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 }
 
 
-b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
-{
-
-
-
-}
 
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
