@@ -20,7 +20,8 @@ enum collider_category : uint16
 	REGULAR_MAP = 0x0002,
 	RAIL = 0x0003,
 	RAIL_BALL = 0x0004,
-	RAIL_ENTRANCE = 0x005
+	RAIL_ENTRANCE = 0x005,
+	RAIL_BALL_ENTRANCE = 0x010
 };
 
 enum update_status

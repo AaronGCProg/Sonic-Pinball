@@ -97,7 +97,7 @@ bool ModuleSceneIntro::Start()
 		13, 130,
 		10, 85
 	};
-	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, REGULAR_MAP, BALL));
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
 	int map_starter_ballShooter[14] = {
 		232, 389,
@@ -108,8 +108,8 @@ bool ModuleSceneIntro::Start()
 		250, 350,
 		248, 390
 	};
-	map_col.add(App->physics->CreateChain(0, 0, map_starter_ballShooter, 14, true, COLLIDER_WALL, REGULAR_MAP, BALL));
-	App->physics->CreateRectangleSensor(242, 140, 5, 5, COLLIDER_BALLTORAIL, REGULAR_MAP, BALL);
+	map_col.add(App->physics->CreateChain(0, 0, map_starter_ballShooter, 14, true, COLLIDER_WALL, BALL, REGULAR_MAP));
+	App->physics->CreateRectangleSensor(242, 140, 5, 5, COLLIDER_BALLTORAIL, BALL, REGULAR_MAP);
 
 	int map_right_rail[94] = {
 	230, 150,
@@ -160,21 +160,30 @@ bool ModuleSceneIntro::Start()
 	247, 73,
 	248, 150
 	};
-	map_col.add(App->physics->CreateChain(0, 0, map_right_rail, 94, true, COLLIDER_WALL, RAIL, RAIL_BALL));
-	App->physics->CreateRectangleSensor(190, 309, 5, 5, COLLIDER_RAILTOBALL, RAIL, RAIL_BALL);
+	map_col.add(App->physics->CreateChain(0, 0, map_right_rail, 94, true, COLLIDER_WALL, RAIL_BALL, RAIL));
+	App->physics->CreateRectangleSensor(190, 309, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
 
 
-	int map_right_rail_rightEnter[16] = {
-	175, 151,
-	204, 121,
+	int map_right_rail_rightEnter[30] = {
+	169, 159,
+	201, 119,
 	216, 97,
 	224, 84,
-	229, 65,
-	250, 73,
-	224, 117,
-	196, 163
+	230, 64,
+	230, 53,
+	226, 44,
+	243, 38,
+	248, 52,
+	248, 68,
+	243, 86,
+	236, 101,
+	227, 113,
+	215, 134,
+	188, 174
 	};
-	//map_col.add(App->physics->CreateChain(0, 0, map_right_rail_rightEnter, 94, true, COLLIDER_WALL, STARTER_RAIL, RAIL_BALL));
+	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_rightEnter, 30, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
+	App->physics->CreateRectangleSensor(195, 145, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(240, 74, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
 	int map_right_rail_leftEnter[78] = {
 	105, 156,
@@ -217,6 +226,64 @@ bool ModuleSceneIntro::Start()
 	99, 105,
 	105, 116
 	};
+	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 78, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
+	App->physics->CreateRectangleSensor(92, 121, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(160, 94, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
+
+	int map_rail_left[64] = {
+	36, 130,
+	30, 110,
+	28, 99,
+	23, 76,
+	22, 68,
+	16, 56,
+	9, 47,
+	2, 44,
+	-7, 118,
+	-6, 133,
+	0, 147,
+	11, 154,
+	19, 169,
+	22, 176,
+	23, 243,
+	21, 274,
+	47, 300,
+	49, 308,
+	42, 317,
+	34, 316,
+	5, 283,
+	4, 189,
+	-3, 176,
+	-7, 172,
+	-30, 166,
+	-30, 24,
+	1, 25,
+	14, 29,
+	23, 35,
+	33, 50,
+	42, 77,
+	54, 124
+	};
+	map_col.add(App->physics->CreateChain(0, 0, map_rail_left, 64, true, COLLIDER_WALL, RAIL_BALL, RAIL));
+	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(43, 110, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
+	App->physics->CreateRectangleSensor(42, 312, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
+
+
+	//Entrance Walls
+	int wall1[16] = {
+		195, 163,
+		211, 140,
+		197, 128,
+		181, 146,
+		178, 150,
+		196, 128,
+		210, 142,
+		193, 163
+	};
+
+	map_col.add(App->physics->CreateChain(0, 0, wall1, 16, true, COLLIDER_WALL, BALL, REGULAR_MAP));
+
 
 
 	int aloneBumper[16] = {
@@ -229,26 +296,54 @@ bool ModuleSceneIntro::Start()
 		129, 41,
 		129, 95
 	};
-	int genericColMap1[36] = {
-		40, 60,
-		58, 124,
-		58, 108,
-		64, 101,
-		71, 101,
-		77, 105,
-		78, 82,
-		63, 74,
-		56, 68,
-		55, 57,
-		66, 54,
-		79, 57,
-		88, 64,
-		92, 69,
-		100, 62,
-		90, 48,
-		76, 39,
-		56, 43
+	int genericColMap1[90] = {
+	56, 124,
+	58, 124,
+	58, 108,
+	64, 101,
+	71, 101,
+	75, 103,
+	78, 113,
+	84, 124,
+	85, 149,
+	87, 162,
+	92, 159,
+	99, 156,
+	107, 159,
+	89, 131,
+	77, 103,
+	77, 95,
+	88, 97,
+	101, 118,
+	105, 114,
+	97, 96,
+	86, 89,
+	77, 79,
+	67, 75,
+	56, 69,
+	53, 62,
+	57, 57,
+	65, 53,
+	71, 54,
+	79, 58,
+	89, 66,
+	105, 82,
+	103, 64,
+	90, 47,
+	84, 42,
+	77, 37,
+	71, 38,
+	63, 40,
+	45, 52,
+	34, 66,
+	29, 84,
+	28, 103,
+	33, 129,
+	36, 130,
+	32, 106,
+	49, 102
 	};
+
 	int genericColMap2[18] = {
 		91, 166,
 		99, 160,
@@ -272,34 +367,34 @@ bool ModuleSceneIntro::Start()
 		156, 337
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 36, true, COLLIDER_WALL, REGULAR_MAP, BALL));
-	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, REGULAR_MAP, BALL));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 90, true, COLLIDER_WALL, BALL, REGULAR_MAP));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
-	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
-	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
-	bumpers.getLast()->data->listener = this;
-
-	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
-	bumpers.getLast()->data->listener = this;
-	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 
-	bumpers.add(App->physics->CreateCircle(195, 90, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
+	bumpers.getLast()->data->listener = this;
+	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 
-	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.add(App->physics->CreateCircle(195, 90, 12, 0.00f, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 
-	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6});
+	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
+	bumpers.getLast()->data->listener = this;
+
+	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6},COLLIDER_GENERAL,BALL,REGULAR_MAP);
 	BleftFlipper->listener = this;
 	JleftFlipper = App->physics->flipperJoints.getLast()->data;
 
-	BrightFlipper = App->physics->CreateFlipper(149, 371, FL_RIGHT, { 24,5 });
+	BrightFlipper = App->physics->CreateFlipper(149, 371, FL_RIGHT, { 24,5 }, COLLIDER_GENERAL, BALL, REGULAR_MAP);
 	BrightFlipper->listener = this;
 	JrightFlipper = App->physics->flipperJoints.getLast()->data;
 
-	ballShooter = App->physics->CreateBallShooter(232, 406, 20, 16, COLLIDER_WALL, REGULAR_MAP, BALL);
+	ballShooter = App->physics->CreateBallShooter(232, 406, 20, 16, COLLIDER_WALL, BALL, REGULAR_MAP);
 
 
 
@@ -375,7 +470,7 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, BALL, REGULAR_MAP));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, REGULAR_MAP, BALL));
 		playerBall.getLast()->data->listener = this;
 	}
 
@@ -462,16 +557,36 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyB->colType == COLLIDER_BALLTORAIL)
 	{
-		bodyA->body->GetFixtureList()->SetFilterData({ RAIL, RAIL_BALL});
+		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL});
 	}
 
 	if (bodyB-> colType == COLLIDER_RAILTOBALL)
 	{
-		bodyA->body->GetFixtureList()->SetFilterData({ REGULAR_MAP, BALL });
+		bodyA->body->GetFixtureList()->SetFilterData({ BALL, REGULAR_MAP });
 		bodyA->body->SetLinearVelocity(b2Vec2(0, 0));
 		bodyA->body->SetAngularVelocity(0);
 	}
 	
+	if (bodyB->colType == COLLIDER_BALLTOENTRANCE)
+	{
+		int speedX = 0;
+		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL_ENTRANCE, RAIL_ENTRANCE });
+		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
+			 speedX = -10;
+		else
+			speedX = 10;
+
+		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -30));
+	}
+
+	if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
+	{
+		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
+	}
+
+	if (bodyB->colType == COLLIDER_BOOSTER)
+	{
+	}
 		
 	actualScore += 10;
 	App->audio->PlayFx(bonus_fx);
