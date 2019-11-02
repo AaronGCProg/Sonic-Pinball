@@ -65,4 +65,5 @@ private:
 	char actualScore_text[12];
 	int actualScore = 0;
 	int fontScore = -1;
+	bool mapDebug = false;
 };

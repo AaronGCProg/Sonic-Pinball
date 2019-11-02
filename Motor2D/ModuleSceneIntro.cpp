@@ -142,6 +142,10 @@ update_status ModuleSceneIntro::PreUpdate()
 update_status ModuleSceneIntro::Update()
 {
 
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		mapDebug = !mapDebug;
+
+	if(!mapDebug)
 	mapBlit();
 
 
