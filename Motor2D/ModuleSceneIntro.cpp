@@ -97,10 +97,22 @@ bool ModuleSceneIntro::Start()
 		13, 130,
 		10, 85
 	};
+	int initialBumpers1[6] = {
+		58, 300,
+		58, 328,
+		76, 339
+	};
+	int initialBumpers2[6] = {
+		175, 300,
+		175, 328,
+		156, 337
+	};
+
 
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
-
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 
 	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 	bumpers.getLast()->data->listener = this;
