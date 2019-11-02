@@ -127,6 +127,31 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 }
 
 
+PhysBody* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
+{
+	b2Body* CircleFlipper = nullptr;;
+	b2Body* rectangleFlipper = nullptr;
+	b2RevoluteJointDef jointFlipperDef;
+	jointFlipperDef.enableMotor = true;
+	jointFlipperDef.maxMotorTorque = 7.5f;
+
+
+	jointFlipperDef.Initialize(rectangleFlipper, CircleFlipper, CircleFlipper->GetWorldCenter());
+
+	b2RevoluteJoint* joinFlipper;
+	joinFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&jointFlipperDef);
+
+	flipperJoint* flipperToCreate = new flipperJoint(joinFlipper, dir);
+	flipperJoints.add(flipperToCreate);
+
+	PhysBody* newBody = new PhysBody();;
+	newBody->body = rectangleFlipper;
+	rectangleFlipper->SetUserData(newBody);
+
+
+	return newBody;
+}
+
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int groupIndex, COLLIDER_TYPE colType, uint16 mask, uint16 cat)
 {

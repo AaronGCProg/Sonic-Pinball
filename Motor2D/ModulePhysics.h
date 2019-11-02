@@ -80,6 +80,9 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, int groupIndex, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
 	PhysBody* CreateChain(int x, int y, int* points, int size, int groupIndex, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir);
+	PhysBody* CreateBumper(int x, int y, flipper_direction dir);
+	PhysBody* CreateBallShooter(int x, int y, flipper_direction dir);
+
 
 	p2List<flipperJoint*> flipperJoints;
 
