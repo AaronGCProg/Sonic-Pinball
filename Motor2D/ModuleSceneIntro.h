@@ -42,6 +42,8 @@ public:
 	b2RevoluteJoint* JleftFlipper;
 	b2RevoluteJoint* JrightFlipper;
 
+	b2PrismaticJoint* ballShooter;
+
 
 	PhysBody* sensor;
 	bool sensed;
@@ -62,7 +64,9 @@ public:
 	char actualScore_text[12];
 	int actualScore = 0;
 	int fontScore = -1;
+
 private:
 
+	bool mapDebug = false;
 
 };

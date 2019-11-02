@@ -54,7 +54,7 @@ update_status ModulePhysics::PreUpdate()
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
-
+	
 	return UPDATE_CONTINUE;
 }
 PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure)
@@ -108,6 +108,37 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 	rectangleFlipper->SetUserData(newBody);
 
 	return newBody;
+}
+
+
+b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+{
+	int launcherRect[8] = {
+	x, y,
+	x+12, y,
+	x+12, y-10,
+	x, y-10
+	};
+
+	b2Body* ballLauncher = App->physics->CreateChain(0, 0, launcherRect,8,true, colType, mask, cat)->body;
+
+	b2PrismaticJointDef jointBallShDef;
+	jointBallShDef.Initialize(App->physics->ground, ballLauncher, ground->GetWorldCenter(), { 0.0f, 1.0f });
+
+	jointBallShDef.enableMotor = true;
+	jointBallShDef.maxMotorForce = 750.0f;
+
+	jointBallShDef.enableLimit = true;
+	jointBallShDef.lowerTranslation = PIXEL_TO_METERS(25);
+	jointBallShDef.upperTranslation = PIXEL_TO_METERS(40);
+
+
+
+
+	b2PrismaticJoint* BSHJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&jointBallShDef);
+
+
+	return BSHJoint;
 }
 
 

@@ -119,6 +119,7 @@ bool ModuleSceneIntro::Start()
 	BrightFlipper->listener = this;
 	JrightFlipper = App->physics->flipperJoints.getLast()->data;
 
+	ballShooter = App->physics->CreateBallShooter(232, 406, COLLIDER_WALL, 0x0002, 0x0001);
 
 
 
@@ -146,6 +147,10 @@ update_status ModuleSceneIntro::PreUpdate()
 update_status ModuleSceneIntro::Update()
 {
 
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		mapDebug = !mapDebug;
+
+	if(!mapDebug)
 	mapBlit();
 
 
@@ -176,6 +181,15 @@ update_status ModuleSceneIntro::Update()
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
 		JrightFlipper->SetMotorSpeed(30);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		ballShooter->SetMotorSpeed((0.0F, 1.0F));
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	{
+		ballShooter->SetMotorSpeed(-40.0f);
 	}
 
 	
