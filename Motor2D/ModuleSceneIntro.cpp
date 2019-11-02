@@ -75,16 +75,18 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	// Example Default Resources
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	// Game Resources
+	// Game Graphic Resources
 	map = App->textures->Load("pinball/map_spritesheet.png");
 	graphics = App->textures->Load("pinball/general_spritesheet.png");
 	fontScore = App->renderer->LoadFont("pinball/score.png", "0123456789%,", 1);
+
+	// Game Audio Resources
+	bouncingBumperFX = App->audio->LoadFx("pinball/audio/bumperEffect.wav");
+	bouncingWallFX = App->audio->LoadFx("pinball/audio/bouncingWall2.wav");
+	startingRoundFX = App->audio->LoadFx("pinball/audio/startingRound.wav");
+	flippersFX = App->audio->LoadFx("pinball/audio/flipperEffect.wav");
+	
 
 
 	// Map Collisions 
@@ -267,6 +269,7 @@ bool ModuleSceneIntro::Start()
 	99, 105,
 	105, 116
 	};
+
 	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 78, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
 	App->physics->CreateRectangleSensor(92, 121, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(160, 94, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
@@ -305,6 +308,7 @@ bool ModuleSceneIntro::Start()
 	42, 77,
 	54, 124
 	};
+
 	map_col.add(App->physics->CreateChain(0, 0, map_rail_left, 64, true, COLLIDER_WALL, RAIL_BALL, RAIL));
 	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(43, 110, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
@@ -437,7 +441,7 @@ bool ModuleSceneIntro::Start()
 
 	ballShooter = App->physics->CreateBallShooter(232, 406, 20, 16, COLLIDER_WALL, BALL, REGULAR_MAP);
 
-
+	App->audio->PlayFx(startingRoundFX);
 
 	return ret;
 }
@@ -478,37 +482,44 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	//Left Trigger
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	{
+		App->audio->PlayFx(flippersFX);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		JleftFlipper->SetMotorSpeed(30);
-
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
 		JleftFlipper->SetMotorSpeed(-30);
 	}
 
 
 	//Right Trigger
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		JrightFlipper->SetMotorSpeed(-30);
+		App->audio->PlayFx(flippersFX);
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		JrightFlipper->SetMotorSpeed(-30);	
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
 		JrightFlipper->SetMotorSpeed(30);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		ballShooter->SetMotorSpeed(1.0f);
+		ballShooter->SetMotorSpeed(40.0f);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
 		ballShooter->SetMotorSpeed(-40.0f);
 	}
 
-	
+
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, REGULAR_MAP, BALL));
@@ -532,23 +543,26 @@ update_status ModuleSceneIntro::PostUpdate()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (bodyB->colType == COLLIDER_BOUNCER) 
+	if (bodyB->colType == COLLIDER_BOUNCER) {
 		bodyA->body->GetContactList()->contact->SetRestitution(2.2f);
+		App->audio->PlayFx(bouncingBumperFX);
+	}
+		
 
 
-	if (bodyB->colType == COLLIDER_BALLTORAIL)
+	else if (bodyB->colType == COLLIDER_BALLTORAIL)
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL});
 	}
 
-	if (bodyB-> colType == COLLIDER_RAILTOBALL)
+	else if (bodyB-> colType == COLLIDER_RAILTOBALL)
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ BALL, REGULAR_MAP });
 		bodyA->body->SetLinearVelocity(b2Vec2(0, 0));
 		bodyA->body->SetAngularVelocity(0);
 	}
 	
-	if (bodyB->colType == COLLIDER_BALLTOENTRANCE)
+	else if (bodyB->colType == COLLIDER_BALLTOENTRANCE)
 	{
 		int speedX = 0;
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL_ENTRANCE, RAIL_ENTRANCE });
@@ -560,17 +574,22 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -30));
 	}
 
-	if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
+	else if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
 	}
 
-	if (bodyB->colType == COLLIDER_BOOSTER)
+	else if (bodyB->colType == COLLIDER_BOOSTER)
 	{
+	}
+
+	else 
+	{
+		App->audio->PlayFx(bouncingWallFX);
 	}
 		
 	actualScore += 10;
-	App->audio->PlayFx(bonus_fx);
+	
 	
 }
 

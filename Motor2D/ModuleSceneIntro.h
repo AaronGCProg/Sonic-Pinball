@@ -73,7 +73,12 @@ public:
 	Animation blueCupoSit;
 	Animation blueCupoSleeping;
 
-	uint bonus_fx;
+	uint startingRoundFX;
+	uint bouncingBumperFX;
+	uint bouncingWallFX;
+	uint flippersFX;
+
+
 	p2Point<int> ray;
 	bool ray_on;
 
