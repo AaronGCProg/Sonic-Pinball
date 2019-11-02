@@ -65,10 +65,11 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 	jointFlipperDef.enableMotor = true;
 	jointFlipperDef.maxMotorTorque = 7.5f;
 
+	CircleFlipper = CreateCircle(x, y, 4, 0.0f, true, COLLIDER_GENERAL, REGULAR_MAP, BALL)->body;
+	CircleFlipper->SetType(b2BodyType::b2_staticBody);
+
 	if (dir == 1)
 	{
-		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
-		CircleFlipper->SetType(b2BodyType::b2_staticBody);
 		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, REGULAR_MAP, BALL)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
@@ -81,9 +82,6 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 	}
 	else if (dir == 2)
 	{
-
-		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
-		CircleFlipper->SetType(b2BodyType::b2_staticBody);
 		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, REGULAR_MAP, BALL)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);

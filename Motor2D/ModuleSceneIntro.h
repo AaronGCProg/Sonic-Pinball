@@ -45,8 +45,13 @@ public:
 	b2PrismaticJoint* ballShooter;
 
 
+	//Sensors
+	//Official
 	PhysBody* sensor;
 	bool sensed;
+	//Testing
+	PhysBody* launcherToRail;
+	PhysBody* railToRegular;
 
 	SDL_Texture* map = nullptr;
 	SDL_Texture* graphics = nullptr;

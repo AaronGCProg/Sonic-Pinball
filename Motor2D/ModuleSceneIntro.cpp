@@ -97,76 +97,22 @@ bool ModuleSceneIntro::Start()
 		13, 130,
 		10, 85
 	};
-	int initialBumpers1[6] = {
-		58, 300,
-		58, 328,
-		76, 339
-	};
-	int initialBumpers2[6] = {
-		175, 300,
-		175, 328,
-		156, 337
-	};
-	int aloneBumper[16] = {
-		126, 75,
-		121, 53,
-		113, 40,
-		107, 36,
-		115, 34,
-		135, 36,
-		129, 41,
-		129, 95
-	};
-	int genericColMap1[36] = {
-		40, 60,
-		58, 124,
-		58, 108,
-		64, 101,
-		71, 101,
-		77, 105,
-		78, 82,
-		63, 74,
-		56, 68,
-		55, 57,
-		66, 54,
-		79, 57,
-		88, 64,
-		92, 69,
-		100, 62,
-		90, 48,
-		76, 39,
-		56, 43
-	};
-	int genericColMap2[18] = {
-		91, 166,
-		99, 160,
-		109, 163,
-		111, 175,
-		116, 176,
-		115, 163,
-		107, 157,
-		98, 156,
-		88, 161
-	};
-
-
-
-
-
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, REGULAR_MAP, BALL));
-
 
 	int map_starter_ballShooter[14] = {
 		232, 389,
 		230, 358,
 		228, 274,
-		232, 72,
-		248, 72,
+		232, 62,
+		248, 62,
 		250, 350,
 		248, 390
 	};
-	int map_starter_rail[94] = {
-	230, 102,
+	map_col.add(App->physics->CreateChain(0, 0, map_starter_ballShooter, 14, true, COLLIDER_WALL, REGULAR_MAP, BALL));
+	App->physics->CreateRectangleSensor(242, 140, 5, 5, COLLIDER_BALLTORAIL, REGULAR_MAP, BALL);
+
+	int map_right_rail[94] = {
+	230, 150,
 	230, 63,
 	229, 48,
 	224, 41,
@@ -212,19 +158,130 @@ bool ModuleSceneIntro::Start()
 	247, 50,
 	247, 61,
 	247, 73,
-	248, 80
+	248, 150
+	};
+	map_col.add(App->physics->CreateChain(0, 0, map_right_rail, 94, true, COLLIDER_WALL, RAIL, RAIL_BALL));
+	App->physics->CreateRectangleSensor(190, 309, 5, 5, COLLIDER_RAILTOBALL, RAIL, RAIL_BALL);
+
+
+	int map_right_rail_rightEnter[16] = {
+	175, 151,
+	204, 121,
+	216, 97,
+	224, 84,
+	229, 65,
+	250, 73,
+	224, 117,
+	196, 163
+	};
+	//map_col.add(App->physics->CreateChain(0, 0, map_right_rail_rightEnter, 94, true, COLLIDER_WALL, STARTER_RAIL, RAIL_BALL));
+
+	int map_right_rail_leftEnter[78] = {
+	105, 156,
+	84, 126,
+	80, 113,
+	78, 105,
+	77, 95,
+	79, 83,
+	85, 76,
+	93, 68,
+	102, 62,
+	116, 57,
+	137, 59,
+	156, 71,
+	165, 82,
+	177, 91,
+	183, 95,
+	195, 98,
+	202, 98,
+	217, 92,
+	224, 86,
+	230, 72,
+	248, 72,
+	244, 82,
+	241, 91,
+	230, 104,
+	224, 112,
+	205, 118,
+	184, 115,
+	168, 107,
+	155, 98,
+	146, 89,
+	141, 81,
+	135, 78,
+	125, 77,
+	115, 77,
+	109, 79,
+	98, 87,
+	98, 95,
+	99, 105,
+	105, 116
 	};
 
 
+	int aloneBumper[16] = {
+		126, 75,
+		121, 53,
+		113, 40,
+		107, 36,
+		115, 34,
+		135, 36,
+		129, 41,
+		129, 95
+	};
+	int genericColMap1[36] = {
+		40, 60,
+		58, 124,
+		58, 108,
+		64, 101,
+		71, 101,
+		77, 105,
+		78, 82,
+		63, 74,
+		56, 68,
+		55, 57,
+		66, 54,
+		79, 57,
+		88, 64,
+		92, 69,
+		100, 62,
+		90, 48,
+		76, 39,
+		56, 43
+	};
+	int genericColMap2[18] = {
+		91, 166,
+		99, 160,
+		109, 163,
+		111, 175,
+		116, 176,
+		115, 163,
+		107, 157,
+		98, 156,
+		88, 161
+	};
 
+	int initialBumpers1[6] = {
+		58, 300,
+		58, 328,
+		76, 339
+	};
+	int initialBumpers2[6] = {
+		175, 300,
+		175, 328,
+		156, 337
+	};
 
-	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 36, true, COLLIDER_WALL, 0x0002, 0x0001));
-	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, 0x0002, 0x0001));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 36, true, COLLIDER_WALL, REGULAR_MAP, BALL));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, REGULAR_MAP, BALL));
 
-	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
-	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
-	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.getLast()->data->listener = this;
+	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.getLast()->data->listener = this;
 
+	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
+	bumpers.getLast()->data->listener = this;
 	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
 	bumpers.getLast()->data->listener = this;
 
@@ -322,55 +379,68 @@ update_status ModuleSceneIntro::Update()
 		playerBall.getLast()->data->listener = this;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+
+	// Prepare for raycast ------------------------------------------------------
+	
+	iPoint mouse;
+	mouse.x = App->input->GetMouseX();
+	mouse.y = App->input->GetMouseY();
+	int ray_hit = ray.DistanceTo(mouse);
+
+	fVector normal(0.0f, 0.0f);
+
+	// All draw functions ------------------------------------------------------
+	p2List_item<PhysBody*>* c = playerBall.getFirst();
+
+	while(c != NULL)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		int x, y;
+		SDL_Rect ball = { 273, 405, 14, 14 };
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(map, x-1, y-1, &ball, 1.0f, c->data->GetRotation());
+		
+		c = c->next;	
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
+	c = boxes.getFirst();
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64, 1));
+	while(c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
+		if(ray_on)
+		{
+			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
+			if(hit >= 0)
+				ray_hit = hit;
+		}
+		c = c->next;
 	}
 
-	
+	c = ricks.getFirst();
 
-	
+	while(c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	// ray -----------------
+	if(ray_on == true)
+	{
+		fVector destination(mouse.x-ray.x, mouse.y-ray.y);
+		destination.Normalize();
+		destination *= ray_hit;
+
+		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
+
+		if(normal.x != 0.0f)
+			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+	}
+
 
 	sprintf_s(actualScore_text, 10, "%7d", actualScore);
 	App->renderer->BlitText((SCREEN_WIDTH / 2) - 15, 40, 0, actualScore_text);
@@ -388,6 +458,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyB->colType == COLLIDER_BOUNCER) 
 		bodyA->body->GetContactList()->contact->SetRestitution(2.2f);
+
+
+	if (bodyB->colType == COLLIDER_BALLTORAIL)
+	{
+		bodyA->body->GetFixtureList()->SetFilterData({ RAIL, RAIL_BALL});
+	}
+
+	if (bodyB-> colType == COLLIDER_RAILTOBALL)
+	{
+		bodyA->body->GetFixtureList()->SetFilterData({ REGULAR_MAP, BALL });
+		bodyA->body->SetLinearVelocity(b2Vec2(0, 0));
+		bodyA->body->SetAngularVelocity(0);
+	}
 	
 		
 	actualScore += 10;
@@ -408,66 +491,6 @@ void ModuleSceneIntro::mapBlit()
 
 	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame());
 
-	// Prepare for raycast ------------------------------------------------------
-
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-	int ray_hit = ray.DistanceTo(mouse);
-
-	fVector normal(0.0f, 0.0f);
-
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = playerBall.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		SDL_Rect ball = { 273, 405, 14, 14 };
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, c->data->GetRotation());
-
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if (ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if (hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	// ray -----------------
-	if (ray_on == true)
-	{
-		fVector destination(mouse.x - ray.x, mouse.y - ray.y);
-		destination.Normalize();
-		destination *= ray_hit;
-
-		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
-
-		if (normal.x != 0.0f)
-			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
-	}
 
 
 	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };

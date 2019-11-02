@@ -38,6 +38,20 @@ struct b2Filter
 		groupIndex = 0;
 	}
 
+	b2Filter(uint16 cat, uint16 mask, int16 index)
+	{
+		categoryBits = cat;
+		maskBits = mask;
+		groupIndex = index;
+	}
+
+	b2Filter(uint16 cat, uint16 mask)
+	{
+		categoryBits = cat;
+		maskBits = mask;
+		groupIndex = 0;
+	}
+
 	/// The collision category bits. Normally you would just set one bit.
 	uint16 categoryBits;
 

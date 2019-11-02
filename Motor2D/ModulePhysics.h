@@ -21,6 +21,8 @@ enum COLLIDER_TYPE
 	COLLIDER_WALL,
 	COLLIDER_BOUNCER,
 	COLLIDER_TRIGGER,
+	COLLIDER_BALLTORAIL,
+	COLLIDER_RAILTOBALL,
 
 
 	COLLIDER_MAX
@@ -61,10 +63,10 @@ public:
 	bool CleanUp();
 
 	
-	PhysBody* CreateCircle(int x, int y, int radius, float bouncing, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
-	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
+	PhysBody* CreateCircle(int x, int y, int radius, float bouncing, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
+	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure);
 	b2PrismaticJoint* CreateBallShooter(int x, int y, int w, int h, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex = 1);
 
