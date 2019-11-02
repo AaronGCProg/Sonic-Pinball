@@ -85,9 +85,10 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 
 	if (dir == 1)
 	{
-		CircleFlipper = CreateCircle(x, y, 4, 1)->body;
+		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, 1, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = -40.0f;
 
@@ -99,9 +100,10 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir)
 	else if (dir == 2)
 	{
 
-		CircleFlipper = CreateCircle(x, y, 4, 1)->body;
+		CircleFlipper = CreateCircle(x, y, 4)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, 1, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = 40.0f;
 
@@ -153,7 +155,7 @@ PhysBody* ModulePhysics::CreateBallShooter(int x, int y, flipper_direction dir)
 }
 
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int groupIndex, COLLIDER_TYPE colType, uint16 mask, uint16 cat)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -181,7 +183,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, int groupIndex, 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, int groupIndex, COLLIDER_TYPE colType, uint16 mask, uint16 cat)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -210,7 +212,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, in
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, int groupIndex, COLLIDER_TYPE colType, uint16 mask, uint16 cat)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -240,7 +242,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, int groupIndex, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
 

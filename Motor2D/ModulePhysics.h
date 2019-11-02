@@ -75,10 +75,10 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, int groupIndex, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, int groupIndex, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, int groupIndex, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
-	PhysBody* CreateChain(int x, int y, int* points, int size, int groupIndex, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016);
+	PhysBody* CreateCircle(int x, int y, int radius, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
+	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir);
 	PhysBody* CreateBumper(int x, int y, flipper_direction dir);
 	PhysBody* CreateBallShooter(int x, int y, flipper_direction dir);

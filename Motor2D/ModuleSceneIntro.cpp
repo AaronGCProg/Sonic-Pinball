@@ -43,6 +43,7 @@ bool ModuleSceneIntro::Start()
 	// Game Resources
 	map = App->textures->Load("pinball/map_spritesheet.png");
 	graphics = App->textures->Load("pinball/general_spritesheet.png");
+	fontScore = App->renderer->LoadFont("pinball/score.png", "0123456789%,", 1);
 
 
 	// Map Collisions 
@@ -97,7 +98,7 @@ bool ModuleSceneIntro::Start()
 		10, 85
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, 1, true, COLLIDER_WALL, 0x0002, 0x0001));
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
 
 	flippers.add(App->physics->CreateFlipper(86,371, FL_LEFT));
@@ -115,6 +116,7 @@ bool ModuleSceneIntro::CleanUp()
 	LOG("Unloading Intro scene");
 	App->textures->Unload(map);
 	App->textures->Unload(graphics);
+	App->renderer->UnLoadFont(fontScore);
 
 	return true;
 }
@@ -171,13 +173,13 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, 1, COLLIDER_BALL, 0x0001, 0x0002));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, COLLIDER_BALL, 0x0001, 0x0002));
 		playerBall.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50, 1));
+		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
@@ -283,13 +285,15 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+
+	sprintf_s(actualScore_text, 10, "%7d", actualScore);
+	App->renderer->BlitText((SCREEN_WIDTH / 2) - 15, 40, 0, actualScore_text);
+
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleSceneIntro::PostUpdate()
 {
-
-	
 
 	return UPDATE_CONTINUE;
 }
@@ -297,10 +301,11 @@ update_status ModuleSceneIntro::PostUpdate()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
-	
-	if(bodyB->colType != COLLIDER_WALL)
-		App->audio->PlayFx(bonus_fx);
+	//if(bodyB->colType != COLLIDER_WALL)
 
+	actualScore += 10;
+	App->audio->PlayFx(bonus_fx);
+	
 }
 
 void ModuleSceneIntro::mapBlit() 
@@ -326,6 +331,12 @@ void ModuleSceneIntro::mapBlit()
 
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
+
+	SDL_Rect flipperL = { 437, 365, 29, 14 };
+	App->renderer->Blit(map, 80, 365, &flipperL);
+
+	SDL_Rect flipperR = { 475, 365, 29, 14 };
+	App->renderer->Blit(map, 125, 365, &flipperR);
 
 	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
 	App->renderer->Blit(map, 55, 298, &initialBouncer);
