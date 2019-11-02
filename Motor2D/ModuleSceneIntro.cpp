@@ -102,9 +102,14 @@ bool ModuleSceneIntro::Start()
 
 
 
-	bumpers.add(App->physics->CreateCircle(158, 80, 12, true, COLLIDER_BALL, 0x0001, 0x0002));
+	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 	bumpers.getLast()->data->listener = this;
 
+	bumpers.add(App->physics->CreateCircle(195, 90, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.getLast()->data->listener = this;
+
+	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.getLast()->data->listener = this;
 
 	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6});
 	BleftFlipper->listener = this;
@@ -190,7 +195,7 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8, false, COLLIDER_BALL, 0x0001, 0x0002));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, 0x0001, 0x0002));
 		playerBall.getLast()->data->listener = this;
 	}
 
@@ -259,8 +264,9 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		SDL_Rect ball = { 273, 405, 14, 14 };
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(map, x, y, &ball, 1.0f, c->data->GetRotation());
-		c = c->next;
+		App->renderer->Blit(map, x-1, y-1, &ball, 1.0f, c->data->GetRotation());
+		
+		c = c->next;	
 	}
 
 	c = boxes.getFirst();
@@ -317,9 +323,10 @@ update_status ModuleSceneIntro::PostUpdate()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-
-	//if(bodyB->colType != COLLIDER_WALL)
-
+	if (bodyB->colType == COLLIDER_BOUNCER) 
+		bodyA->body->GetContactList()->contact->SetRestitution(2.2f);
+	
+		
 	actualScore += 10;
 	App->audio->PlayFx(bonus_fx);
 	

@@ -60,10 +60,13 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 
-private:
 
 	char actualScore_text[12];
 	int actualScore = 0;
 	int fontScore = -1;
+
+private:
+
 	bool mapDebug = false;
+
 };

@@ -43,6 +43,7 @@ public:
 	b2Body* body;
 	COLLIDER_TYPE colType = COLLIDER_GENERAL;
 	Module* listener;
+
 };
 
 
@@ -59,7 +60,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
+	
+	PhysBody* CreateCircle(int x, int y, int radius, float bouncing, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
