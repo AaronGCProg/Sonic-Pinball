@@ -42,6 +42,8 @@ public:
 	b2RevoluteJoint* JleftFlipper;
 	b2RevoluteJoint* JrightFlipper;
 
+	b2PrismaticJoint* ballShooter;
+
 
 	PhysBody* sensor;
 	bool sensed;
