@@ -35,23 +35,6 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	/* big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* big_ball = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	big_ball->CreateFixture(&fixture); */
 
 	return true;
 }
@@ -84,7 +67,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 
 	if (dir == 1)
 	{
-		CircleFlipper = CreateCircle(x, y, 4)->body;
+		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
 		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
 
@@ -99,7 +82,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 	else if (dir == 2)
 	{
 
-		CircleFlipper = CreateCircle(x, y, 4)->body;
+		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
 		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
 
@@ -128,9 +111,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 }
 
 
-
-
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, float bouncing, bool staticObject, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	b2BodyDef body;
 
@@ -148,7 +129,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool staticObjec
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
-	fixture.restitution = 0.2f;
+	fixture.restitution = bouncing;
 	fixture.filter.maskBits = mask;
 	fixture.filter.categoryBits = cat;
 
