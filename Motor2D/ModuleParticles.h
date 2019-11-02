@@ -53,8 +53,7 @@ private:
 public:
 
 	Particle* active[MAX_ACTIVE_PARTICLES];
-	Particle dustJumping;
-	Particle dustRunning;
+	Particle smoke;
 
 };
 

@@ -59,7 +59,19 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 
+	// Props
+	Animation coin;
+
+	// Scene Decoration
 	Animation mapMonitor;
+
+	// Animals Decoration
+	Animation brownBambi;
+	Animation blueBird;
+	Animation pinkBunny;
+	Animation blackSquirrel;
+	Animation blueCupoSit;
+	Animation blueCupoSleeping;
 
 	uint bonus_fx;
 	p2Point<int> ray;

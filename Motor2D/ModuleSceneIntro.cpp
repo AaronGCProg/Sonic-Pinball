@@ -14,6 +14,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ray_on = false;
 	sensed = false;
 
+	coin.PushBack({ 372, 158, 16, 16 });
+	coin.PushBack({ 392, 158, 11, 16 });
+	coin.PushBack({ 407, 158, 4, 16 });
+	coin.PushBack({ 415, 158, 11, 16 });
+	coin.speed = 0.15f;
 
 	mapMonitor.PushBack({ 0, 509, 48, 55 });
 	mapMonitor.PushBack({ 52, 509, 48, 55 });
@@ -21,6 +26,42 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	mapMonitor.PushBack({ 52, 509, 48, 55 });
 	mapMonitor.speed = 0.15f;
 
+	brownBambi.PushBack({ 551, 439, 22, 30 });
+	brownBambi.PushBack({ 576, 439, 20, 30 });
+	brownBambi.PushBack({ 599, 441, 22, 28 });
+	brownBambi.PushBack({ 624, 440, 18, 29 });
+	brownBambi.PushBack({ 645, 444, 23, 25 });
+	brownBambi.speed = 0.15f;
+
+	pinkBunny.PushBack({ 679, 383, 13, 24 });
+	pinkBunny.PushBack({ 695, 384, 14, 23 });
+	pinkBunny.PushBack({ 712, 385, 13, 22 });
+	pinkBunny.PushBack({ 728, 384, 13, 23 });
+	pinkBunny.speed = 0.15f;
+
+	blackSquirrel.PushBack({ 630, 387, 12, 20 });
+	blackSquirrel.PushBack({ 644, 388, 13, 19 });
+	blackSquirrel.PushBack({ 660, 389, 13, 18 });
+	blackSquirrel.speed = 0.15f;
+
+	blueBird.PushBack({ 666, 443, 22, 26 });
+	blueBird.PushBack({ 701, 443, 19, 26 });
+	blueBird.PushBack({ 723, 443, 19, 26 });
+	blueBird.speed = 0.15f;
+
+	blueCupoSit.PushBack({ 458, 104, 22, 33 });
+	blueCupoSit.PushBack({ 482, 103, 21, 34 });
+	blueCupoSit.PushBack({ 506, 102, 21, 35 });
+	blueCupoSit.PushBack({ 530, 105, 20, 30 });
+	blueCupoSit.PushBack({ 553, 102, 20, 32 });
+	blueCupoSit.speed = 0.15f;
+
+	blueCupoSleeping.PushBack({ 576, 111, 30, 26 });
+	blueCupoSleeping.PushBack({ 609, 109, 28, 28 });
+	blueCupoSleeping.PushBack({ 640, 109, 28, 28 });
+	blueCupoSleeping.PushBack({ 671, 108, 26, 29 });
+	blueCupoSleeping.PushBack({ 700, 108, 26, 29 });
+	blueCupoSleeping.speed = 0.15f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()

@@ -21,7 +21,11 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Awake()
 {
 	// Loading Particle Animations
-
+	smoke.anim.PushBack({ 412, 441, 29, 28 });
+	smoke.anim.PushBack({ 449, 441, 28, 27 });
+	smoke.anim.PushBack({ 483, 439, 27, 29 });
+	smoke.anim.PushBack({ 518, 439, 26, 29 });
+	smoke.anim.speed = 0.15f;
 
 	return true;
 
