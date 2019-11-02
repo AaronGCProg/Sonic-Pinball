@@ -228,8 +228,8 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRectangleSensor(195, 145, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(240, 74, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
-	int map_right_rail_leftEnter[78] = {
-	105, 156,
+	int map_right_rail_leftEnter[44] = {
+	88, 130,
 	84, 126,
 	80, 113,
 	78, 105,
@@ -242,35 +242,19 @@ bool ModuleSceneIntro::Start()
 	137, 59,
 	156, 71,
 	165, 82,
-	177, 91,
-	183, 95,
-	195, 98,
-	202, 98,
-	217, 92,
-	224, 86,
-	230, 72,
-	248, 72,
-	244, 82,
-	241, 91,
-	230, 104,
-	224, 112,
-	205, 118,
-	184, 115,
-	168, 107,
-	155, 98,
-	146, 89,
-	141, 81,
-	135, 78,
-	125, 77,
-	115, 77,
-	109, 79,
-	98, 87,
-	98, 95,
-	99, 105,
-	105, 116
+	155, 96,
+	141, 84,
+	134, 78,
+	115, 75,
+	108, 77,
+	98, 82,
+	97, 91,
+	97, 104,
+	104, 116
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 78, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
+
+	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 44, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
 	App->physics->CreateRectangleSensor(92, 121, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(160, 94, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
@@ -543,12 +527,12 @@ update_status ModuleSceneIntro::PostUpdate()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+
 	if (bodyB->colType == COLLIDER_BOUNCER) {
-		bodyA->body->GetContactList()->contact->SetRestitution(2.2f);
+		bodyA->body->GetContactList()->contact->SetRestitution(1.6f);
 		App->audio->PlayFx(bouncingBumperFX);
 	}
 		
-
 
 	else if (bodyB->colType == COLLIDER_BALLTORAIL)
 	{
@@ -571,13 +555,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else
 			speedX = 10;
 
-		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -30));
+		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -15));
 	}
 
 	else if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
 	}
+
 
 	else if (bodyB->colType == COLLIDER_BOOSTER)
 	{
@@ -587,6 +572,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		App->audio->PlayFx(bouncingWallFX);
 	}
+
+
 		
 	actualScore += 10;
 	
@@ -611,7 +598,7 @@ void ModuleSceneIntro::mapBlit()
 	// All draw functions ------------------------------------------------------
 	p2List_item<PhysBody*>* c = playerBall.getFirst();
 
-	while (c != NULL)
+	while (c != NULL && (c->data->body->GetFixtureList()->GetFilterData().categoryBits == BALL || c->data->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL))
 	{
 		int x, y;
 		SDL_Rect ball = { 273, 405, 14, 14 };
@@ -682,9 +669,6 @@ void ModuleSceneIntro::mapBlit()
 	SDL_Rect rail = { 166, 467, 105, 89 };
 	App->renderer->Blit(map, 142, 62, &rail);
 
-
-
-
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
 
@@ -705,5 +689,16 @@ void ModuleSceneIntro::mapBlit()
 	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
 	App->renderer->Blit(map, 153, 298, &initialBouncer2);
 
+	c = playerBall.getFirst();
+
+	while (c != NULL &&c->data->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL_ENTRANCE)
+	{
+		int x, y;
+		SDL_Rect ball = { 273, 405, 14, 14 };
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, c->data->GetRotation());
+
+		c = c->next;
+	}
 
 }
