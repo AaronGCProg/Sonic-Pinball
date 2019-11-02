@@ -107,12 +107,60 @@ bool ModuleSceneIntro::Start()
 		175, 328,
 		156, 337
 	};
+	int aloneBumper[16] = {
+		126, 75,
+		121, 53,
+		113, 40,
+		107, 36,
+		115, 34,
+		135, 36,
+		129, 41,
+		129, 95
+	};
+	int genericColMap1[36] = {
+		40, 60,
+		58, 124,
+		58, 108,
+		64, 101,
+		71, 101,
+		77, 105,
+		78, 82,
+		63, 74,
+		56, 68,
+		55, 57,
+		66, 54,
+		79, 57,
+		88, 64,
+		92, 69,
+		100, 62,
+		90, 48,
+		76, 39,
+		56, 43
+	};
+	int genericColMap2[18] = {
+		91, 166,
+		99, 160,
+		109, 163,
+		111, 175,
+		116, 176,
+		115, 163,
+		107, 157,
+		98, 156,
+		88, 161
+	};
+
+
+
 
 
 	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
 
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 36, true, COLLIDER_WALL, 0x0002, 0x0001));
+	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, 0x0002, 0x0001));
+
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateChain(0, 0, aloneBumper, 16, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 
 	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
 	bumpers.getLast()->data->listener = this;
