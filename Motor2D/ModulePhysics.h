@@ -66,8 +66,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 1);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure);
-	PhysBody* CreateBumper(int x, int y, flipper_direction dir);
-	b2PrismaticJoint* CreateBallShooter(int x, int y, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex = 1);
+	b2PrismaticJoint* CreateBallShooter(int x, int y, int w, int h, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex = 1);
 
 
 	p2List<b2RevoluteJoint*> flipperJoints;

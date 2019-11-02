@@ -98,17 +98,80 @@ bool ModuleSceneIntro::Start()
 		10, 85
 	};
 
-	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, 0x0002, 0x0001));
+	map_col.add(App->physics->CreateChain(0, 0, map_spritesheet, 94, true, COLLIDER_WALL, REGULAR_MAP, BALL));
+
+
+	int map_starter_ballShooter[14] = {
+		232, 389,
+		230, 358,
+		228, 274,
+		232, 72,
+		248, 72,
+		250, 350,
+		248, 390
+	};
+	int map_starter_rail[94] = {
+	230, 102,
+	230, 63,
+	229, 48,
+	224, 41,
+	218, 36,
+	209, 30,
+	202, 27,
+	194, 27,
+	187, 30,
+	179, 32,
+	174, 36,
+	170, 45,
+	165, 57,
+	165, 63,
+	164, 69,
+	164, 75,
+	166, 84,
+	170, 89,
+	174, 92,
+	243, 162,
+	240, 269,
+	191, 316,
+	185, 313,
+	182, 301,
+	186, 297,
+	193, 294,
+	222, 260,
+	224, 163,
+	152, 93,
+	149, 84,
+	146, 75,
+	145, 65,
+	145, 57,
+	151, 39,
+	156, 29,
+	163, 21,
+	171, 16,
+	178, 12,
+	184, 12,
+	215, 12,
+	230, 21,
+	241, 35,
+	244, 41,
+	247, 50,
+	247, 61,
+	247, 73,
+	248, 80
+	};
 
 
 
-	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+
+
+
+	bumpers.add(App->physics->CreateCircle(160, 82, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
 	bumpers.getLast()->data->listener = this;
 
-	bumpers.add(App->physics->CreateCircle(195, 90, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateCircle(195, 90, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
 	bumpers.getLast()->data->listener = this;
 
-	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, 0x0002, 0x0001));
+	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, REGULAR_MAP, BALL));
 	bumpers.getLast()->data->listener = this;
 
 	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6});
@@ -119,7 +182,7 @@ bool ModuleSceneIntro::Start()
 	BrightFlipper->listener = this;
 	JrightFlipper = App->physics->flipperJoints.getLast()->data;
 
-	ballShooter = App->physics->CreateBallShooter(232, 406, COLLIDER_WALL, 0x0002, 0x0001);
+	ballShooter = App->physics->CreateBallShooter(232, 406, 20, 16, COLLIDER_WALL, REGULAR_MAP, BALL);
 
 
 
@@ -195,7 +258,7 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, 0x0001, 0x0002));
+		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, BALL, REGULAR_MAP));
 		playerBall.getLast()->data->listener = this;
 	}
 

@@ -69,7 +69,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 	{
 		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x + mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, REGULAR_MAP, BALL)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = -40.0f;
@@ -84,7 +84,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 
 		CircleFlipper = CreateCircle(x, y, 4, 0.0f)->body;
 		CircleFlipper->SetType(b2BodyType::b2_staticBody);
-		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, 0x0002, 0x0001)->body;
+		rectangleFlipper = App->physics->CreateRectangle(x - mesure.x / 2, y, mesure.x, mesure.y, false, COLLIDER_GENERAL, REGULAR_MAP, BALL)->body;
 
 		rectangleFlipper->SetType(b2BodyType::b2_dynamicBody);
 		jointFlipperDef.motorSpeed = 40.0f;
@@ -111,13 +111,13 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, flipper_direction dir, b2Ve
 }
 
 
-b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y,int w, int h, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
 {
 	int launcherRect[8] = {
 	x, y,
-	x+12, y,
-	x+12, y-17,
-	x, y-17
+	x+w, y,
+	x+w, y-h,
+	x, y-h
 	};
 
 	b2Body* ballLauncher = App->physics->CreateChain(0, 0, launcherRect,8,false, colType, mask, cat)->body;
@@ -129,7 +129,7 @@ b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y, COLLIDER_TYPE c
 	jointBallShDef.maxMotorForce = 100.0f;
 
 	jointBallShDef.enableLimit = true;
-	jointBallShDef.lowerTranslation = 0.0f;
+	jointBallShDef.lowerTranslation = -0.1f;
 	jointBallShDef.upperTranslation = 0.5f;
 
 	b2PrismaticJoint* BSHJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&jointBallShDef);

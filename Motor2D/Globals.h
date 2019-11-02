@@ -14,6 +14,13 @@ void log(const char file[], int line, const char* format, ...);
 
 typedef unsigned int uint;
 
+enum collider_category : int16
+{
+	BALL = 0x0001,
+	REGULAR_MAP,
+	mask_3
+};
+
 enum update_status
 {
 	UPDATE_CONTINUE = 1,
@@ -26,7 +33,7 @@ enum flipper_direction
 	FL_NONE,
 
 	FL_LEFT,
-	FL_RIGHT,
+	FL_RIGHT
 };
 
 // Configuration -----------
