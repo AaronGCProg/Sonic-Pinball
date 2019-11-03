@@ -15,14 +15,22 @@ public:
 	void ReStartGame();
 	void MinusLife();
 	void AddScore(int scoreas);
+	void UpdateScore();
+	void ReSetScore();
+
+
 
 
 public:
 
 	int lifes = 3;
 
-	char actualScore_text[12];
+	char Score_text[15];
 	int actualScore = 0;
-	int fontScore = -1;
+	int prevScore = 0;
+	int HhighestScore = 0;
+	int actualRound = 0;
+
+	int ScoreFont = -1;
 
 };
