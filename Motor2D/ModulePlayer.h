@@ -13,7 +13,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 	bool ReStartGame();
-	void MinusLife();
+	void AdjustLife(int life);
 	void AddScore(int scoreas);
 	void UpdateScore();
 	void ReSetScore();

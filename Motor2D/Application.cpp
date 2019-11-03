@@ -30,7 +30,6 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(particles);
 	AddModule(physics);
 	AddModule(renderer);
 	AddModule(textures);
@@ -42,6 +41,10 @@ Application::Application()
 	
 	// Player
 	AddModule(player);
+
+	//Particles
+	AddModule(particles);
+
 }
 
 Application::~Application()

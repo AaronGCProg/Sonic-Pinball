@@ -27,6 +27,14 @@ enum COLLIDER_TYPE
 	COLLIDER_ENTRANCETORAIL,
 	COLLIDER_BOOSTER,
 	COLLIDER_DEATH,
+	COLLIDER_EGG_1,
+	COLLIDER_EGG_2,
+	COLLIDER_LAUNCHER,
+	COLLIDER_BALL_SHOOTER,
+	COLLIDER_BALLTOENTRANCETORAIL,
+	COLLIDER_EGG_NONE,
+	COLLIDER_LOLIPOP,
+
 
 	COLLIDER_MAX
 };
@@ -80,9 +88,11 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	bool debug = false;
+
+
 private:
 
-	bool debug;
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;

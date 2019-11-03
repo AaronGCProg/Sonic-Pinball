@@ -42,7 +42,7 @@ public:
 	bool CleanUp();
 
 
-	void AddParticle(const Particle& particle, int x, int y, SDL_RendererFlip fliped, Uint32 delay = 0);
+	void AddParticle(const Particle& particle, int x, int y, SDL_RendererFlip fliped = SDL_FLIP_NONE, Uint32 delay = 0);
 
 private:
 

@@ -26,6 +26,7 @@ bool ModuleParticles::Awake()
 	smoke.anim.PushBack({ 483, 439, 27, 29 });
 	smoke.anim.PushBack({ 518, 439, 26, 29 });
 	smoke.anim.speed = 0.15f;
+	smoke.life = 300;
 
 	return true;
 
@@ -66,7 +67,7 @@ update_status ModuleParticles::Update()
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			App->renderer->Blit(App->scene_intro->graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), 1.0, 1.0, p->fliped);
+			App->renderer->Blit(App->scene_intro->graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), INT_MAX, INT_MAX, p->fliped);
 			
 
 			if (p->fx_played == false)
@@ -126,9 +127,7 @@ bool Particle::Update()
 		if ((SDL_GetTicks() - born) > life)
 			ret = false;
 	}
-	else
-		if (anim.Finished())
-			ret = false;
+
 
 	position.x += speed.x;
 	position.y += speed.y;

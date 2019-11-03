@@ -16,12 +16,14 @@ public:
 	bool Start();
 	update_status PreUpdate();
 	update_status Update();
-	update_status PostUpdate();
 	bool CleanUp();
 
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void mapBlit();
+	void Disapearing();
+	void DebugInputs();
+	void PlayerInputs();
 	
 
 public:
@@ -71,26 +73,36 @@ public:
 	Animation blueCupoSit;
 	Animation blueCupoSleeping;
 	Animation eggCupo;
-
+	Animation eggCupo2;
 	Animation monsterFrog;
 	Animation animalSquirrel;
-
 	Animation monsterBat;
 	Animation animalBird;
-
 	Animation monsterCrap;
 	Animation animalElephant;
+	Animation launcher;
 
 
 
-	uint startingRoundFX;
-	uint bouncingBumperFX;
-	uint bouncingWallFX;
-	uint flippersFX;
-	uint boostFX;
+
+	uint startingRoundFX = 0u;
+	uint bouncingBumperFX = 0u;
+	uint bouncingWallFX = 0u;
+	uint flippersFX = 0u;
+	uint boostFX = 0u;
 	uint loseballFX = 0u;
 	uint winRoundFX = 0u;
 	uint loseRoundFX = 0u;
+	uint ballDisapearFX = 0u;
+	uint lifeWonFX = 0u;
+	uint ballShooterFX = 0u;
+
+	bool egg1 = true;
+	bool egg2 = true;
+	bool disapear = false;
+	bool launcheable = false;
+	uint disapearTimer = 0u;
+	b2Vec2 disapearCoords = { 0,0 };
 
 
 	p2Point<int> ray;
@@ -102,6 +114,7 @@ private:
 
 	bool mapDebug = false;
 	bool reStart = false;
+
 
 
 };

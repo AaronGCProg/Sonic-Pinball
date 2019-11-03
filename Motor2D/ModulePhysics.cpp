@@ -16,7 +16,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -124,7 +124,7 @@ b2PrismaticJoint* ModulePhysics::CreateBallShooter(int x, int y,int w, int h, CO
 	jointBallShDef.Initialize(ground, ballLauncher, ground->GetWorldCenter(), { 0.0f, 1.0f });
 
 	jointBallShDef.enableMotor = true;
-	jointBallShDef.maxMotorForce = 100.0f;
+	jointBallShDef.maxMotorForce = 200.0f;
 
 	jointBallShDef.enableLimit = true;
 	jointBallShDef.lowerTranslation = -0.1f;
@@ -280,8 +280,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool s
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		debug = !debug;
+
 
 	if(!debug)
 		return UPDATE_CONTINUE;

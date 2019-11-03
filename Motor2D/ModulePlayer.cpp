@@ -78,9 +78,6 @@ update_status ModulePlayer::Update()
 	sprintf_s(Score_text, 10, "%7d", actualRound);
 	App->renderer->BlitText(47, 448, 0, Score_text);
 
-	App->renderer->Blit(graphics, 10, 365, &brownBambi.GetCurrentFrame());
-
-
 
 	if (roundWin || roundLose)
 	{
@@ -118,12 +115,13 @@ update_status ModulePlayer::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModulePlayer::MinusLife()
+void ModulePlayer::AdjustLife(int life)
 {
 	if (lifes >= 0)
 	{
-		lifes -= 1;
+		lifes += life;
 	}
+
 }
 
 void ModulePlayer::AddScore(int score)
@@ -166,6 +164,9 @@ bool ModulePlayer::ReStartGame()
 		actualRound++;
 		lifes = 3;
 
+		App->scene_intro->egg1 = true;
+		App->scene_intro->egg2 = true;
+
 		return true;
 	}
 
@@ -184,6 +185,3 @@ bool ModulePlayer::ReStartGame()
 	return true;
 
 }
-
-
-
