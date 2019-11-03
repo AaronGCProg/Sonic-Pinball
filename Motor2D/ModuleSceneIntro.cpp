@@ -710,6 +710,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		bodyA->body->GetContactList()->contact->SetRestitution(1.3f);
 		App->audio->PlayFx(bouncingBumperFX);
+		App->player->AddScore(35);
 		break;
 	}
 	case COLLIDER_BALLTORAIL: //when the ball enters a rail
@@ -737,112 +738,100 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			speedX = -5;
 		else
 			speedX = 5;
+
+		App->player->AddScore(25);
 		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
 		break;
 	}
 
 	case COLLIDER_BALLTOENTRANCETORAIL: //When the ball enters to the left rail of the nmap
 	{
-		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL_ENTRANCE, RAIL_ENTRANCE });
-		App->audio->PlayFx(boostFX);
+		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
 
 		int speedX = 0;
 		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
 			speedX = -5;
 		else
 			speedX = 5;
+
+		App->audio->PlayFx(boostFX);
+
+		App->player->AddScore(25);
 		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
 		break;
 	}
 
-
-
-	}
-	
-
-	else if (bodyB->colType == COLLIDER_BALLTOENTRANCETORAIL)
-	{
-		int speedX = 0;
-		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
-		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
-			speedX = -5;
-		else
-			speedX = 5;
-
-		App->audio->PlayFx(boostFX);
-
-
-		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
-	}
-
-	else if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
+	case COLLIDER_ENTRANCETORAIL: //When the ball enters the rail from an entrance in the map
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
+		break;
 	}
 
-	if (bodyB->colType == COLLIDER_DEATH)
+	case COLLIDER_DEATH: //When the ball falls from the stage
 	{
 		reStart = true;
 		App->audio->PlayFx(loseballFX);
+		break;
 	}
 
-	if (bodyB->colType == COLLIDER_EGG_1)
+	case COLLIDER_EGG_1: //When the ball enters the first teleporter
 	{
 		if (egg1)
 		{
 			egg1 = false;
-			if (!egg1 && !egg2)
-			{
-				App->player->AdjustLife(1);
-				App->audio->PlayFx(lifeWonFX);
-			}
-
+			ComboEggs();
+			App->player->AddScore(50);
 		}
-		App->particles->AddParticle(App->particles->smoke, 80, 130);
+		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
 	}
 
-	if (bodyB->colType == COLLIDER_EGG_2)
+	case COLLIDER_EGG_2: //When the ball enters the second teleporter
 	{
 		if (egg2)
 		{
 			egg2 = false;
-			if (!egg1 && !egg2)
-			{
-				App->player->AdjustLife(+1);
-				App->audio->PlayFx(lifeWonFX);
-			}
+			ComboEggs();
+			App->player->AddScore(50);
 		}
 		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
-
 	}
 
-	if (bodyB->colType == COLLIDER_LAUNCHER) 
+	case COLLIDER_LAUNCHER: //checks if the player is ready to launch
 	{
 		launcheable = true;
+		break;
 	}
-
-
-	if (bodyB->colType == COLLIDER_BALL_SHOOTER && launcheable)
+	case COLLIDER_BALL_SHOOTER: //Controls if the ball is ready to launch or not
 	{
-		App->audio->PlayFx(ballShooterFX);
+		if(launcheable)
+			App->audio->PlayFx(ballShooterFX);
+		break;
 	}
-
-	if (bodyB->colType == COLLIDER_EGG_NONE )
+	case COLLIDER_EGG_NONE: //Teleport from the tunels that don't have an egg asigned
 	{
 		disapear = true;
+		App->player->AddScore(25);
+		break;
 	}
-
-
-	else 
+	case COLLIDER_WALL:
 	{
 		App->audio->PlayFx(bouncingWallFX);
 	}
+	}
 
-	App->player->AddScore(10);
-	
-	
+}
+
+//Combo: when you enter 2 specific teleportes, you get an extra life
+void ModuleSceneIntro::ComboEggs()
+{
+	if (!egg1 && !egg2)
+	{
+		App->player->AdjustLife(+1);
+		App->audio->PlayFx(lifeWonFX);
+		App->player->AddScore(100);
+	}
 }
 
 void ModuleSceneIntro::mapBlit() 

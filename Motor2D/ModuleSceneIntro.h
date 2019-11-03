@@ -24,6 +24,7 @@ public:
 	void Disapearing();
 	void DebugInputs();
 	void PlayerInputs();
+	void ComboEggs();
 	
 
 public:
