@@ -567,7 +567,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_WALL:
 	{
 		App->audio->PlayFx(bouncingWallFX);
-		points += 1;
 		break;
 	}
 	}
