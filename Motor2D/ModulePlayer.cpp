@@ -30,6 +30,9 @@ bool ModulePlayer::Start()
 	App->scene_intro->playerBall->listener = pointer;
 
 	ScoreFont = App->renderer->LoadFont("pinball/score_text.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ", 1);
+	ui = App->textures->Load("pinball/misc.png");
+	ui_sup = App->textures->Load("pinball/misc2.png");
+
 
 	actualRound++;
 
@@ -42,6 +45,8 @@ bool ModulePlayer::CleanUp()
 	LOG("Unloading player");
 
 	App->renderer->UnLoadFont(ScoreFont);
+	App->textures->Unload(ui);
+
 
 	return true;
 }
@@ -72,6 +77,43 @@ update_status ModulePlayer::Update()
 	App->renderer->BlitText(37, 448, 0, "ROUND");
 	sprintf_s(Score_text, 10, "%7d", actualRound);
 	App->renderer->BlitText(47, 448, 0, Score_text);
+
+	App->renderer->Blit(graphics, 10, 365, &brownBambi.GetCurrentFrame());
+
+
+
+	if (roundWin || roundLose)
+	{
+		roundTimer++;
+
+		SDL_Rect win_banner = { 40, 238, 240, 56 };
+		App->renderer->Blit(ui, 5 , SCREEN_HEIGHT / 4.5f, &win_banner, 1.0f);
+
+
+		SDL_Rect banner_strip = { 3, 52, 33, 62 };
+		App->renderer->Blit(ui, -15, SCREEN_HEIGHT / 4.5f-5, &banner_strip, 1.0f);
+
+		if (roundWin)
+		{
+			SDL_Rect sonic_thumbs_up = { 500,405, 63, 55 };
+			App->renderer->Blit(ui_sup, SCREEN_WIDTH / 2 - 35, SCREEN_HEIGHT / 2.75f, &sonic_thumbs_up, 1.0f);
+
+			SDL_Rect winner = { 566,414, 104, 35 };
+			App->renderer->Blit(ui_sup, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 3.25f, &winner, 1.0f);
+
+		}
+
+		if (roundTimer == 70)
+		{
+			roundWin = false;
+			roundLose = false;
+			roundTimer = 0;
+			App->audio->PlayFx(App->scene_intro->startingRoundFX, 0, 10);
+			ReStartGame();
+		}
+
+	}
+
 
 	return UPDATE_CONTINUE;
 }
@@ -104,8 +146,28 @@ void ModulePlayer::ReSetScore()
 	actualScore = 0;
 }
 
-void ModulePlayer::ReStartGame()
+bool ModulePlayer::ReStartGame()
 {
+	if (lifes <= 0)
+	{
+		if (starterHighScore < HhighestScore)
+		{
+			roundWin = true;
+			starterHighScore = HhighestScore;
+			App->audio->PlayFx(App->scene_intro->winRoundFX, 0, 10);
+
+		}
+		else
+		{
+			roundLose = true;
+			App->audio->PlayFx(App->scene_intro->loseRoundFX, 0, 10);
+
+		}
+		actualRound++;
+		lifes = 3;
+
+		return true;
+	}
 
 	App->scene_intro->playerBall->body->SetTransform({ PIXEL_TO_METERS(240),PIXEL_TO_METERS(382) }, 0.0f);
 	App->scene_intro->playerBall->body->SetAngularVelocity(0.0f);
@@ -118,12 +180,8 @@ void ModulePlayer::ReStartGame()
 
 	UpdateScore();
 	ReSetScore();
-	if (lifes <= 0)
-	{
-		actualRound++;
-		lifes = 3;
-		App->audio->PlayFx(App->scene_intro->startingRoundFX);
-	}
+
+	return true;
 
 }
 

@@ -12,16 +12,18 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
-	void ReStartGame();
+	bool ReStartGame();
 	void MinusLife();
 	void AddScore(int scoreas);
 	void UpdateScore();
 	void ReSetScore();
 
+	SDL_Texture* ui = nullptr;
+	SDL_Texture* ui_sup = nullptr;
 
 
 
-public:
+private:
 
 	int lifes = 3;
 
@@ -30,6 +32,12 @@ public:
 	int prevScore = 0;
 	int HhighestScore = 0;
 	int actualRound = 0;
+	int starterHighScore = 0;
+
+	bool roundWin = false;
+	bool roundLose = false;
+
+	uint roundTimer = 0u;
 
 	int ScoreFont = -1;
 

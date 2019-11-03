@@ -12,7 +12,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	circle = NULL;
 	ray_on = false;
 	sensed = false;
 
@@ -88,11 +88,10 @@ bool ModuleSceneIntro::Start()
 	startingRoundFX = App->audio->LoadFx("pinball/audio/startingRound.wav");
 	flippersFX = App->audio->LoadFx("pinball/audio/flipperEffect.wav");
 	boostFX = App->audio->LoadFx("pinball/audio/speedupBall.wav");
+	loseballFX = App->audio->LoadFx("pinball/audio/losingBall.wav");
+	winRoundFX = App->audio->LoadFx("pinball/audio/highScoreEffect2.wav");
+	loseRoundFX = App->audio->LoadFx("pinball/audio/loseEffect.wav");
 	App->audio->PlayMusic("pinball/audio/ost/angel_island_loop.ogg");
-
-
-	
-
 
 	// Map Collisions 
 	// Pivot 0, 0

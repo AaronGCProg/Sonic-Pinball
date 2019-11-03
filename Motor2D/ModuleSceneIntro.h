@@ -56,8 +56,6 @@ public:
 	SDL_Texture* map = nullptr;
 	SDL_Texture* graphics = nullptr;
 	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
 
 	// Props
 	Animation coin;
@@ -78,6 +76,9 @@ public:
 	uint bouncingWallFX;
 	uint flippersFX;
 	uint boostFX;
+	uint loseballFX = 0u;
+	uint winRoundFX = 0u;
+	uint loseRoundFX = 0u;
 
 
 	p2Point<int> ray;
