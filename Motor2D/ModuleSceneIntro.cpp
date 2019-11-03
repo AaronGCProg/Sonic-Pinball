@@ -23,7 +23,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	coin.PushBack({ 392, 158, 11, 16 });
 	coin.PushBack({ 407, 158, 4, 16 });
 	coin.PushBack({ 415, 158, 11, 16 });
-	coin.speed = 0.15f;
+	coin.speed = 0.10f;
 
 	mapMonitor.PushBack({ 0, 509, 48, 55 });
 	mapMonitor.PushBack({ 52, 509, 48, 55 });
@@ -613,6 +613,7 @@ void ModuleSceneIntro::mapBlit()
 
 	SDL_Rect background = { 1, 1, 256, 416 };
 	App->renderer->Blit(map, 0, 0, &background);
+	
 
 	// In-Game Animals--------------------------------------
 	App->renderer->Blit(graphics, 180, 335, &animalElephant.GetCurrentFrame());
@@ -746,5 +747,6 @@ void ModuleSceneIntro::mapBlit()
 		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
 
 	}
+
 
 }

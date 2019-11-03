@@ -107,6 +107,7 @@ void ModulePlayer::DrawUI()
 	App->renderer->BlitText((SCREEN_WIDTH / 2) - 30, 425, 0, "SCORE");
 	sprintf_s(Score_text, 10, "%7d", actualScore);
 	App->renderer->BlitText((SCREEN_WIDTH / 2) - 50, 435, 0, Score_text);
+	App->renderer->Blit(App->scene_intro->graphics, 142, 418, &App->scene_intro->coin.GetCurrentFrame());
 
 	//Highest Score
 	App->renderer->BlitText(SCREEN_WIDTH - 60, 425, 0, "HIGHEST");
