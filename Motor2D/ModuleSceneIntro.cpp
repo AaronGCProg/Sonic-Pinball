@@ -176,7 +176,7 @@ bool ModuleSceneIntro::Start()
 
 	//Right Rail Left Entrance
 	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 44, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
-	App->physics->CreateRectangleSensor(92, 121, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(92, 110, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(160, 94, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
 	//Left Rail
@@ -434,13 +434,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		//Calculate it's boost depending on it's speed in entering
 		int speedX = 0;
-		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
-			speedX = -5;
+		if (bodyA->body->GetPosition().x < PIXEL_TO_METERS(SCREEN_WIDTH / 4))
+			speedX = 5;
 		else
 			speedX = 5;
 
 		points += 25;
-		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
+		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -15));
 		break;
 	}
 
