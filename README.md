@@ -27,7 +27,7 @@ https://kbhgames.com/game/sonic-pinball-party
 - Throw the ball: Down arrow
 
 ## Debug
-- F1: See colliders and activate mouse joint.
+- F1: See colliders and activate mouse joint. (WARNING: Be careful using the mouse joint near the rails, you could deny it's boost and get your ball stuck!)
 - F2: Unsee the map.
 
 ## Combos Implemented:
