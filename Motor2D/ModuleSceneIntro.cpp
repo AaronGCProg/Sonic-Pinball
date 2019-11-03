@@ -285,6 +285,8 @@ update_status ModuleSceneIntro::PreUpdate()
 	if (disapear)
 		Disapearing();
 
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -427,6 +429,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_BALLTOENTRANCE: //when the ball enters a rail from the map
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL_ENTRANCE, RAIL_ENTRANCE });
+		points += 100;
 		App->audio->PlayFx(boostFX);
 
 		//Calculate it's boost depending on it's speed in entering
@@ -444,6 +447,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_BALLTOENTRANCETORAIL: //When the ball enters to the left rail of the nmap
 	{
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
+		points += 100;
 
 		int speedX = 0;
 		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
