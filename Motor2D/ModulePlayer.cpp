@@ -132,6 +132,10 @@ void ModulePlayer::DrawUI()
 void ModulePlayer::DrawEndRoundScreen()
 {
 	roundTimer++;
+	App->input->Disable();
+	int endRoundLimit = 120;
+
+	Mix_HaltMusic();
 
 	SDL_Rect win_banner = { 40, 238, 240, 56 };
 	App->renderer->Blit(ui, 5, SCREEN_HEIGHT / 4.5f, &win_banner, 1.0f);
@@ -148,15 +152,18 @@ void ModulePlayer::DrawEndRoundScreen()
 		SDL_Rect winner = { 566,414, 104, 35 };
 		App->renderer->Blit(ui_sup, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 3.25f, &winner, 1.0f);
 
+		endRoundLimit = 60;
 	}
 
-	if (roundTimer == 70)
+	if (roundTimer == 120)
 	{
 		roundWin = false;
 		roundLose = false;
 		roundTimer = 0;
 		App->audio->PlayFx(App->scene_intro->startingRoundFX, 0, 10);
 		ReStartGame();
+		App->audio->PlayMusic("pinball/audio/ost/angel_island_loop.ogg");
+		App->input->Enable();
 	}
 }
 
@@ -195,10 +202,10 @@ bool ModulePlayer::ReStartGame()
 {
 	if (lifes <= 0)
 	{
-		RoundEnd();
 		actualRound++;
 		UpdateScore();
 		ReSetScore();
+		RoundEnd();
 
 		lifes = 3;
 		return true;
