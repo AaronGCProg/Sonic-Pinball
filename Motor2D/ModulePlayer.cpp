@@ -46,6 +46,7 @@ bool ModulePlayer::CleanUp()
 
 	App->renderer->UnLoadFont(ScoreFont);
 	App->textures->Unload(ui);
+	App->textures->Unload / (ui_sup);
 
 
 	return true;

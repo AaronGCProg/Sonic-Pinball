@@ -571,6 +571,9 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(map);
 	App->textures->Unload(graphics);
 
+
+	Mix_FadeOutMusic(200);
+
 	return true;
 }
 //Controls the internal gameplay
@@ -594,8 +597,6 @@ update_status ModuleSceneIntro::PreUpdate()
 
 	return UPDATE_CONTINUE;
 }
-
-
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
@@ -627,33 +628,6 @@ void ModuleSceneIntro::DebugInputs()
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
 	}
-}
-
-//Control of the ball when it goes through a tunel
-void ModuleSceneIntro::Disapearing()
-{
-	if (disapearCoords.x == 0)
-	{
-		disapearCoords = playerBall->body->GetPosition();
-		App->audio->PlayFx(ballDisapearFX);
-	}
-	disapearTimer++;
-
-
-	App->scene_intro->playerBall->body->SetTransform({ PIXEL_TO_METERS(1000),PIXEL_TO_METERS(1000) }, 0.0f);
-
-	if (disapearTimer > 30)
-	{
-		disapearTimer = 0;
-		playerBall->body->SetTransform({ disapearCoords.x + PIXEL_TO_METERS(5), disapearCoords.y + PIXEL_TO_METERS(5) }, 0.0f);
-		App->scene_intro->playerBall->body->SetAngularVelocity(0.0f);
-		App->scene_intro->playerBall->body->SetLinearVelocity({ 0,0 });
-		App->audio->PlayFx(ballDisapearFX);
-		disapear = false;
-		disapearCoords = { 0,0 };
-	}
-
-
 }
 
 void ModuleSceneIntro::PlayerInputs()
@@ -700,6 +674,35 @@ void ModuleSceneIntro::PlayerInputs()
 
 
 }
+
+
+//Control of the ball when it goes through a tunel
+void ModuleSceneIntro::Disapearing()
+{
+	if (disapearCoords.x == 0)
+	{
+		disapearCoords = playerBall->body->GetPosition();
+		App->audio->PlayFx(ballDisapearFX);
+	}
+	disapearTimer++;
+
+
+	App->scene_intro->playerBall->body->SetTransform({ PIXEL_TO_METERS(1000),PIXEL_TO_METERS(1000) }, 0.0f);
+
+	if (disapearTimer > 30)
+	{
+		disapearTimer = 0;
+		playerBall->body->SetTransform({ disapearCoords.x + PIXEL_TO_METERS(5), disapearCoords.y + PIXEL_TO_METERS(5) }, 0.0f);
+		App->scene_intro->playerBall->body->SetAngularVelocity(0.0f);
+		App->scene_intro->playerBall->body->SetLinearVelocity({ 0,0 });
+		App->audio->PlayFx(ballDisapearFX);
+		disapear = false;
+		disapearCoords = { 0,0 };
+	}
+
+
+}
+
 
 //Controls the map collision
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
@@ -836,6 +839,8 @@ void ModuleSceneIntro::ComboEggs()
 
 void ModuleSceneIntro::mapBlit() 
 {
+	//Background-----------------------------
+
 	SDL_Rect background = { 1, 1, 256, 416 };
 	App->renderer->Blit(map, 0, 0, &background);
 
@@ -845,18 +850,8 @@ void ModuleSceneIntro::mapBlit()
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 	int ray_hit = ray.DistanceTo(mouse);
-
 	fVector normal(0.0f, 0.0f);
 
-	// All draw functions ------------------------------------------------------
-
-	if (playerBall != nullptr && (playerBall->body->GetFixtureList()->GetFilterData().categoryBits == BALL || playerBall->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL))
-	{
-		int x, y;
-		SDL_Rect ball = { 273, 405, 14, 14 };
-		playerBall->GetPosition(x, y);
-		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
-	}
 
 	// ray -----------------
 	if (ray_on == true)
@@ -871,15 +866,33 @@ void ModuleSceneIntro::mapBlit()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+	//Ball in the background ------------------------------------------------------
 
+	if (playerBall != nullptr && (playerBall->body->GetFixtureList()->GetFilterData().categoryBits == BALL || playerBall->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL))
+	{
+		int x, y;
+		SDL_Rect ball = { 273, 405, 14, 14 };
+		playerBall->GetPosition(x, y);
+		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
+	}
+
+	//Bouncers ------------------------------------------------------
 
 	SDL_Rect bouncer = { 445, 389, 26, 26 };
 	App->renderer->Blit(map, 145, 70, &bouncer);
 	App->renderer->Blit(map, 182, 78, &bouncer);
 	App->renderer->Blit(map, 145, 105, &bouncer);
 
+	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
+	App->renderer->Blit(map, 55, 298, &initialBouncer);
+
+	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
+	App->renderer->Blit(map, 153, 298, &initialBouncer2);
+
+	//Map details ------------------------------------------------------
 	App->renderer->Blit(map, 40, 30, &mapMonitor.GetCurrentFrame());
 
+	//Animals ------------------------------------------------------
 	App->renderer->Blit(graphics, 10, 365, &brownBambi.GetCurrentFrame());
 	App->renderer->Blit(graphics, 50, 375, &blueBird.GetCurrentFrame());
 	App->renderer->Blit(graphics, 30, 385, &blackSquirrel.GetCurrentFrame());
@@ -889,11 +902,15 @@ void ModuleSceneIntro::mapBlit()
 	App->renderer->Blit(graphics, 180, 380, &blueCupoSit.GetCurrentFrame());
 
 
-
+	//Map Rails ------------------------------------------------------
 	SDL_Rect backgroundPlus = { 258, 1, 256, 350 };
 	App->renderer->Blit(map, 0, 0, &backgroundPlus);
 
+	SDL_Rect rail = { 166, 467, 105, 89 };
+	App->renderer->Blit(map, 142, 62, &rail);
 
+
+	//Eggs ------------------------------------------------------
 	SDL_Rect egg = { 517, 152, 26, 31 };
 	if(egg1)
 	App->renderer->Blit(graphics, 80, 130, &egg);
@@ -902,18 +919,18 @@ void ModuleSceneIntro::mapBlit()
 
 
 
-	SDL_Rect rail = { 166, 467, 105, 89 };
-	App->renderer->Blit(map, 142, 62, &rail);
 
+	//Launcher ------------------------------------------------------
 	SDL_Rect goPush = { 381, 365, 32, 64 };
 	App->renderer->Blit(map, 230, 344, &goPush);
 
-	
 	if (launcheable)
 	{
+		//Red launcher if is ready to launch
 		App->renderer->Blit(map, 232, 397, &launcher.GetCurrentFrame());
 	}
 
+	//Flippers ------------------------------------------------------
 	SDL_Rect flipper = { 436, 368, 31, 12 };
 
 	iPoint LFpos = { METERS_TO_PIXELS(BleftFlipper->body->GetPosition().x),METERS_TO_PIXELS(BleftFlipper->body->GetPosition().y) };
@@ -925,12 +942,8 @@ void ModuleSceneIntro::mapBlit()
 	App->renderer->Blit(map, rightFlipPos.x - RFOff.x / 2, rightFlipPos.y - RFOff.y, &flipper, 1.0f, RADTODEG * BrightFlipper->body->GetAngle(), INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
 
 
-	SDL_Rect initialBouncer = { 327, 387, 23, 41 };
-	App->renderer->Blit(map, 55, 298, &initialBouncer);
 
-	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
-	App->renderer->Blit(map, 153, 298, &initialBouncer2);
-
+	//Ball in the foreground-------------------------------------------
 	if (playerBall != nullptr && playerBall->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL_ENTRANCE)
 	{
 		int x, y;
