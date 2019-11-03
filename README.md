@@ -33,3 +33,4 @@ https://kbhgames.com/game/sonic-pinball-party
 ## Combos Implemented:
 - Activate the 3 "lolipops" that are above the bumpers to get X2 score.
 - Go through 2 specific tunnels and hatch the eggs to get an extra ball!
+-You can go through the rails and gain 100 points!
