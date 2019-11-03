@@ -108,7 +108,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	animalElephant.PushBack({ 106, 403, 15, 14 });
 	animalElephant.PushBack({ 124, 403, 13, 14 });
-	animalElephant.PushBack({ 141, 403, 11, 14 });
+	animalElephant.PushBack({ 140, 403, 11, 14 });
 	animalElephant.speed = 0.10f;
 
 	launcher.PushBack({ 383, 431, 16, 7 });
@@ -612,6 +612,12 @@ void ModuleSceneIntro::mapBlit()
 	SDL_Rect background = { 1, 1, 256, 416 };
 	App->renderer->Blit(map, 0, 0, &background);
 
+	// In-Game Animals--------------------------------------
+	App->renderer->Blit(graphics, 180, 335, &animalElephant.GetCurrentFrame());
+	App->renderer->Blit(graphics, 60, 345, &animalSquirrel.GetCurrentFrame(),1.0f,0,0,0,SDL_FLIP_HORIZONTAL);
+	App->renderer->Blit(graphics, 200, 195, &animalBird.GetCurrentFrame());
+
+
 	// Prepare for raycast ------------------------------------------------------
 
 	iPoint mouse;
@@ -679,6 +685,8 @@ void ModuleSceneIntro::mapBlit()
 	App->renderer->Blit(graphics, 160, 385, &pinkBunny.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
 	App->renderer->Blit(graphics, 195, 370, &blueCupoSleeping.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
 	App->renderer->Blit(graphics, 180, 380, &blueCupoSit.GetCurrentFrame());
+
+	
 
 
 	//Map Rails ------------------------------------------------------
