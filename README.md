@@ -13,9 +13,9 @@ Aaron Guerrero Cruz:
 https://github.com/AaronGCProg/Sonic-Pinball
 
 ## Original game:
-https://kbhgames.com/game/sonic-pinball-party
+ https://kbhgames.com/game/sonic-pinball-party
 
-##Differences:
+## Differences:
 - The UI is situated in the opposite side (down) and it's contenents had to be changed in order to fit the assignment.
 - Some audio effects are from a different version of the same game (not from the Game Boy Advance, but from the Genesis).
 - Some lights & combos do not work.
