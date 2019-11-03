@@ -510,7 +510,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		ballShooter->SetMotorSpeed(80.0f);
+		ballShooter->SetMotorSpeed(100.0f);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
