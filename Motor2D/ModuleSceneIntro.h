@@ -70,6 +70,18 @@ public:
 	Animation blackSquirrel;
 	Animation blueCupoSit;
 	Animation blueCupoSleeping;
+	Animation eggCupo;
+
+	Animation monsterFrog;
+	Animation animalSquirrel;
+
+	Animation monsterBat;
+	Animation animalBird;
+
+	Animation monsterCrap;
+	Animation animalElephant;
+
+
 
 	uint startingRoundFX;
 	uint bouncingBumperFX;
