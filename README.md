@@ -9,7 +9,7 @@ Alex Melenchón Maza:
 Aaron Guerrero Cruz: 
  - https://github.com/AaronGCProg
 
-## Github link:
+## Github Project link:
 https://github.com/AaronGCProg/Sonic-Pinball
 
 ## Original game:
