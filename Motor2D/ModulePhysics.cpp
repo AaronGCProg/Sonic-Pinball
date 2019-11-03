@@ -39,7 +39,7 @@ bool ModulePhysics::Start()
 	return true;
 }
 
-// 
+// World Stepping & Collision
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
@@ -280,8 +280,6 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool s
 // 
 update_status ModulePhysics::PostUpdate()
 {
-
-
 	if(!debug)
 		return UPDATE_CONTINUE;
 
@@ -370,7 +368,6 @@ update_status ModulePhysics::PostUpdate()
 			{
 				if (f->TestPoint(mouse_position))
 				{
-
 					b2MouseJointDef def;
 					def.bodyA = ground;
 					def.bodyB = b;
@@ -379,20 +376,22 @@ update_status ModulePhysics::PostUpdate()
 					def.frequencyHz = 2.0f;
 					def.maxForce = 100.0f * b->GetMass();
 					mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-				
+					
+					mouseJointBody = b;
 				}
 			}
 		}
 	}
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint != nullptr)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint != nullptr && mouseJointBody != nullptr)
 		{
 			mouse_joint->SetTarget(mouse_position);
 			App->renderer->DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorA().x), METERS_TO_PIXELS(mouse_joint->GetAnchorA().y), METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), 255, 0, 0);
 		}
-		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr)
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr && mouseJointBody != nullptr)
 		{
 			world->DestroyJoint(mouse_joint);
 			mouse_joint = nullptr;
+			mouseJointBody = nullptr;
 		}
 
 	return UPDATE_CONTINUE;

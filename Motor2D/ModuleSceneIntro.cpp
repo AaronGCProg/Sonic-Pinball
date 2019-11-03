@@ -9,6 +9,7 @@
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
 #include "ModuleParticles.h"
+#include "MapChains.h"
 
 
 
@@ -16,8 +17,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 {
 	circle = NULL;
 	ray_on = false;
-	sensed = false;
 
+	//Animation Load ------------------------------------------------------
 	coin.PushBack({ 372, 158, 16, 16 });
 	coin.PushBack({ 392, 158, 11, 16 });
 	coin.PushBack({ 407, 158, 4, 16 });
@@ -127,7 +128,6 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-
 	// Game Graphic Resources
 	map = App->textures->Load("pinball/map_spritesheet.png");
 	graphics = App->textures->Load("pinball/general_spritesheet.png");
@@ -145,396 +145,73 @@ bool ModuleSceneIntro::Start()
 	lifeWonFX = App->audio->LoadFx("pinball/audio/highScoreEffect1.wav");
 	ballShooterFX = App->audio->LoadFx("pinball/audio/launchingBall3.wav");
 
-
+	// Game Music
 	App->audio->PlayMusic("pinball/audio/ost/angel_island_loop.ogg");
 
-	// Map Collisions 
-	// Pivot 0, 0
-	int blue_triangle[18] = {
-		228, 413,
-		228, 359,
-		142, 402,
-		144, 446,
-		83, 445,
-		86, 405,
-		4, 365,
-		3, 446,
-		228, 446
-	};
+	// Map Collisions & Sensors----------------------------------
 
-	int general_map_right[74]
-	{
-	143, 374,
-	152, 370,
-	151, 363,
-	221, 331,
-	224, 270,
-	207, 267,
-	199, 213,
-	227, 210,
-	231, 107,
-	229, 69,
-	243, 58,
-	246, 38,
-	244, 24,
-	231, 9,
-	218, 6,
-	216, 12,
-	217, 26,
-	220, 34,
-	184, 22,
-	156, 18,
-	132, 15,
-	99, 15,
-	76, 15,
-	51, 23,
-	34, 33,
-	27, 41,
-	20, 37,
-	41, 21,
-	74, 7,
-	159, 8,
-	200, 21,
-	225, 2,
-	253, 23,
-	252, 61,
-	231, 81,
-	225, 335,
-	155, 374
-	};
-
-	int map_left_enter[14] = {
-	90, 375,
-	80, 371,
-	80, 363,
-	37, 344,
-	34, 298,
-	31, 347,
-	74, 371
-	};
-
-	int general_map_left[78] = {
-	8, 360,
-	6, 293,
-	12, 283,
-	20, 278,
-	30, 275,
-	38, 273,
-	26, 258,
-	13, 242,
-	11, 233,
-	12, 227,
-	19, 223,
-	27, 223,
-	33, 230,
-	34, 209,
-	32, 199,
-	25, 181,
-	21, 171,
-	15, 153,
-	10, 131,
-	9, 110,
-	8, 85,
-	12, 69,
-	14, 63,
-	20, 52,
-	28, 38,
-	40, 28,
-	59, 19,
-	82, 14,
-	103, 11,
-	118, 11,
-	151, 17,
-	173, 21,
-	214, 32,
-	206, 23,
-	114, 6,
-	49, 13,
-	10, 48,
-	0, 103,
-	0, 362
-	};
-
-
+	//General Map
 	map_col.add(App->physics->CreateChain(0, 0, blue_triangle, 18, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, general_map_right, 74, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, map_left_enter, 14, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, general_map_left, 78, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
 
-	int map_starter_ballShooter[14] = {
-		232, 389,
-		248, 391,
-		248, 348,
-		249, 73,
-		257, 74,
-		255, 407,
-		229, 407
-	};
+	//Ball Shooter
 	map_col.add(App->physics->CreateChain(0, 0, map_starter_ballShooter, 14, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	App->physics->CreateRectangleSensor(242, 140, 5, 5, COLLIDER_BALLTORAIL, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(242, 385, 5, 5, COLLIDER_LAUNCHER, BALL, REGULAR_MAP);
 
-
-	int map_right_rail[94] = {
-	230, 150,
-	230, 63,
-	229, 48,
-	224, 41,
-	218, 36,
-	209, 30,
-	202, 27,
-	194, 27,
-	187, 30,
-	179, 32,
-	174, 36,
-	170, 45,
-	165, 57,
-	165, 63,
-	164, 69,
-	164, 75,
-	166, 84,
-	170, 89,
-	174, 92,
-	243, 162,
-	240, 269,
-	191, 316,
-	185, 313,
-	182, 301,
-	186, 297,
-	193, 294,
-	222, 260,
-	224, 163,
-	152, 93,
-	149, 84,
-	146, 75,
-	145, 65,
-	145, 57,
-	151, 39,
-	156, 29,
-	163, 21,
-	171, 16,
-	178, 12,
-	184, 12,
-	215, 12,
-	230, 21,
-	241, 35,
-	244, 41,
-	247, 50,
-	247, 61,
-	247, 73,
-	248, 150
-	};
+	//Right Rail
 	map_col.add(App->physics->CreateChain(0, 0, map_right_rail, 94, true, COLLIDER_WALL, RAIL_BALL, RAIL));
 	App->physics->CreateRectangleSensor(190, 309, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
 
-
-	int map_right_rail_rightEnter[30] = {
-	169, 159,
-	201, 119,
-	216, 97,
-	224, 84,
-	230, 64,
-	230, 53,
-	226, 44,
-	243, 38,
-	248, 52,
-	248, 68,
-	243, 86,
-	236, 101,
-	227, 113,
-	215, 134,
-	188, 174
-	};
+	//Right Rail Right Entrance
 	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_rightEnter, 30, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
 	App->physics->CreateRectangleSensor(195, 145, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(240, 74, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
-	int map_right_rail_leftEnter[44] = {
-	88, 130,
-	84, 126,
-	80, 113,
-	78, 105,
-	77, 95,
-	79, 83,
-	85, 76,
-	93, 68,
-	102, 62,
-	116, 57,
-	137, 59,
-	156, 71,
-	165, 82,
-	155, 96,
-	141, 84,
-	134, 78,
-	115, 75,
-	108, 77,
-	98, 82,
-	97, 91,
-	97, 104,
-	104, 116
-	};
-
-
+	//Right Rail Left Entrance
 	map_col.add(App->physics->CreateChain(0, 0, map_right_rail_leftEnter, 44, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
 	App->physics->CreateRectangleSensor(92, 121, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(160, 94, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 
-	int map_rail_left[64] = {
-	37, 140,
-	30, 110,
-	28, 99,
-	23, 76,
-	22, 68,
-	16, 56,
-	9, 47,
-	2, 44,
-	-7, 118,
-	-6, 133,
-	0, 147,
-	11, 154,
-	19, 169,
-	22, 176,
-	23, 243,
-	21, 274,
-	47, 300,
-	49, 308,
-	42, 317,
-	34, 316,
-	5, 283,
-	4, 189,
-	-3, 176,
-	-7, 172,
-	-30, 166,
-	-30, 24,
-	1, 25,
-	14, 29,
-	23, 35,
-	33, 50,
-	42, 77,
-	61, 138
-	};
-
+	//Left Rail
 	map_col.add(App->physics->CreateChain(0, 0, map_rail_left, 64, true, COLLIDER_WALL, RAIL_BALL, RAIL));
 	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCETORAIL, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(42, 312, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
 
 
 	//Entrance Walls
-	int wall1[16] = {
-		195, 163,
-		211, 140,
-		197, 128,
-		181, 146,
-		178, 150,
-		196, 128,
-		210, 142,
-		193, 163
-	};
-
 	map_col.add(App->physics->CreateChain(0, 0, wall1, 16, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
 
-
-	int aloneBumper[16] = {
-		126, 75,
-		121, 53,
-		113, 40,
-		107, 36,
-		115, 34,
-		135, 36,
-		129, 41,
-		129, 95
-	};
-	int genericColMap1[90] = {
-	56, 124,
-	58, 124,
-	58, 108,
-	64, 101,
-	71, 101,
-	75, 103,
-	78, 113,
-	84, 124,
-	85, 149,
-	87, 162,
-	92, 159,
-	99, 156,
-	107, 159,
-	89, 131,
-	77, 103,
-	77, 95,
-	88, 97,
-	101, 118,
-	105, 114,
-	97, 96,
-	86, 89,
-	77, 79,
-	67, 75,
-	56, 69,
-	53, 62,
-	57, 57,
-	65, 53,
-	71, 54,
-	79, 58,
-	89, 66,
-	105, 82,
-	103, 64,
-	90, 47,
-	84, 42,
-	77, 37,
-	71, 38,
-	63, 40,
-	45, 52,
-	34, 66,
-	29, 84,
-	28, 103,
-	33, 129,
-	36, 130,
-	32, 106,
-	49, 102
-	};
-
-	int genericColMap2[18] = {
-		91, 166,
-		99, 160,
-		109, 163,
-		111, 175,
-		116, 176,
-		115, 163,
-		107, 157,
-		98, 156,
-		88, 161
-	};
-
-	int initialBumpers1[6] = {
-		58, 300,
-		58, 328,
-		76, 339
-	};
-	int initialBumpers2[6] = {
-		175, 300,
-		175, 328,
-		156, 337
-	};
-
+	//Map Shapes
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 90, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
+	//Death Sensor
 	App->physics->CreateRectangleSensor(250, 460, 500, 50, COLLIDER_DEATH, BALL, REGULAR_MAP);
 
+	//Egg Sensors
 	App->physics->CreateRectangleSensor(103, 172, 15, 15, COLLIDER_EGG_1, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(17, 227, 15, 15, COLLIDER_EGG_NONE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(68, 110, 15, 15, COLLIDER_EGG_2, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(59, 59, 15, 15, COLLIDER_EGG_NONE, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(221, 14, 15, 15, COLLIDER_EGG_NONE, BALL, REGULAR_MAP);
 
+	//Lolipop Sensors
 	App->physics->CreateRectangleSensor(143, 29, 10, 10, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(172, 37, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
 	App->physics->CreateRectangleSensor(200, 45, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
 
 
+	//Physical Objects-----------------------------------
+
+	//Bumpers
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
+
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 
@@ -549,6 +226,8 @@ bool ModuleSceneIntro::Start()
 	bumpers.add(App->physics->CreateCircle(158, 118, 12, 0.00f, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 
+
+	//Flippers
 	BleftFlipper = App->physics->CreateFlipper(86, 371, FL_LEFT, {24,6},COLLIDER_GENERAL,BALL,REGULAR_MAP);
 	BleftFlipper->listener = this;
 	JleftFlipper = App->physics->flipperJoints.getLast()->data;
@@ -557,9 +236,9 @@ bool ModuleSceneIntro::Start()
 	BrightFlipper->listener = this;
 	JrightFlipper = App->physics->flipperJoints.getLast()->data;
 
+	//Ball Shooter
 	ballShooter = App->physics->CreateBallShooter(232, 406, 20, 16, COLLIDER_BALL_SHOOTER, BALL, REGULAR_MAP);
 
-	App->audio->PlayFx(startingRoundFX);
 
 	return ret;
 }

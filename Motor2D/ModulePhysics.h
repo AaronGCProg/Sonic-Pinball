@@ -13,7 +13,7 @@
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
  
 
-
+//Colliders Enum to manipulate the collisions
 enum COLLIDER_TYPE
 {
 	COLLIDER_GENERAL = -1,
@@ -34,7 +34,6 @@ enum COLLIDER_TYPE
 	COLLIDER_BALLTOENTRANCETORAIL,
 	COLLIDER_EGG_NONE,
 	COLLIDER_LOLIPOP,
-
 
 	COLLIDER_MAX
 };
@@ -73,7 +72,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	
+	//Physical objects creation---------------------
 	PhysBody* CreateCircle(int x, int y, int radius, float bouncing, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
@@ -81,8 +80,9 @@ public:
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	b2PrismaticJoint* CreateBallShooter(int x, int y, int w, int h, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex = 1);
 
-
+	//Joints List---------------
 	p2List<b2RevoluteJoint*> flipperJoints;
+	b2MouseJoint* mouse_joint;
 
 
 	// b2ContactListener ---
@@ -92,8 +92,11 @@ public:
 
 
 private:
-
+	//World Control---------------
 	b2World* world;
-	b2MouseJoint* mouse_joint;
 	b2Body* ground;
+
+	//Joint Control-------------------
+	b2Body* mouseJointBody = nullptr;
+
 };

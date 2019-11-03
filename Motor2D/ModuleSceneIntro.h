@@ -20,6 +20,7 @@ public:
 
 
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 	void mapBlit();
 	void Disapearing();
 	void DebugInputs();
@@ -29,37 +30,29 @@ public:
 
 public:
 
-	// Official 
+	// Physical Objects & Joints--------------------------- 
+	//Ball
 	PhysBody* playerBall;
+	//Map Colliders
 	p2List<PhysBody*> map_col;
+	//Bumpers
 	p2List<PhysBody*> bumpers;
-
-	// Testing
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
-	p2List<PhysBody*> flippers;
-
+	//Flippers
 	PhysBody* BleftFlipper;
 	PhysBody* BrightFlipper;
-
+	//Flipper Joints
 	b2RevoluteJoint* JleftFlipper;
 	b2RevoluteJoint* JrightFlipper;
-
+	//Ball Shooter
 	b2PrismaticJoint* ballShooter;
 
 
-	//Sensors
-	//Official
-	PhysBody* sensor;
-	bool sensed;
-	//Testing
-	PhysBody* launcherToRail;
-	PhysBody* railToRegular;
-
+	//Textures-------------------------------------
 	SDL_Texture* map = nullptr;
 	SDL_Texture* graphics = nullptr;
 	SDL_Texture* circle;
 
+	//Animations--------------------------------
 	// Props
 	Animation coin;
 
@@ -85,7 +78,7 @@ public:
 
 
 
-
+	//Sound effects--------------------------------
 	uint startingRoundFX = 0u;
 	uint bouncingBumperFX = 0u;
 	uint bouncingWallFX = 0u;
@@ -98,24 +91,25 @@ public:
 	uint lifeWonFX = 0u;
 	uint ballShooterFX = 0u;
 
+	//Map Control----------------------------
 	bool egg1 = true;
 	bool egg2 = true;
-	bool disapear = false;
-	bool launcheable = false;
-	uint disapearTimer = 0u;
-	b2Vec2 disapearCoords = { 0,0 };
 
 
+	//Ray-------------------------------------
 	p2Point<int> ray;
 	bool ray_on;
 
 
 
 private:
-
+	//Internal Control-------------------------------
 	bool mapDebug = false;
 	bool reStart = false;
-
+	bool disapear = false;
+	bool launcheable = false;
+	uint disapearTimer = 0u;
+	b2Vec2 disapearCoords = { 0,0 };
 
 
 };
