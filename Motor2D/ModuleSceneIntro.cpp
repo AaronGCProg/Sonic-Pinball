@@ -23,7 +23,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	coin.PushBack({ 392, 158, 11, 16 });
 	coin.PushBack({ 407, 158, 4, 16 });
 	coin.PushBack({ 415, 158, 11, 16 });
-	coin.speed = 0.15f;
+	coin.speed = 0.10f;
 
 	mapMonitor.PushBack({ 0, 509, 48, 55 });
 	mapMonitor.PushBack({ 52, 509, 48, 55 });
@@ -108,7 +108,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	animalElephant.PushBack({ 106, 403, 15, 14 });
 	animalElephant.PushBack({ 124, 403, 13, 14 });
-	animalElephant.PushBack({ 141, 403, 11, 14 });
+	animalElephant.PushBack({ 140, 403, 11, 14 });
 	animalElephant.speed = 0.10f;
 
 	launcher.PushBack({ 383, 431, 16, 7 });
@@ -181,7 +181,9 @@ bool ModuleSceneIntro::Start()
 
 	//Left Rail
 	map_col.add(App->physics->CreateChain(0, 0, map_rail_left, 64, true, COLLIDER_WALL, RAIL_BALL, RAIL));
-	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCETORAIL, BALL, REGULAR_MAP);
+	map_col.add(App->physics->CreateChain(0, 0, left_rail_entrance, 36, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
+	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(4, 40, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 	App->physics->CreateRectangleSensor(42, 312, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
 
 
@@ -204,18 +206,12 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRectangleSensor(221, 14, 15, 15, COLLIDER_EGG_NONE, BALL, REGULAR_MAP);
 
 	//Lolipop Sensors
-	lightsCombo* aux = new lightsCombo(App->physics->CreateRectangleSensor(143, 28, 10, 10, COLLIDER_LOLIPOP, BALL, REGULAR_MAP, 0,SUBG_1),false);
-	lolipops[0] = aux;
-	lolipops[0]->physBody->listener = this;
-	delete aux;
-	lightsCombo* aux2 = new lightsCombo(App->physics->CreateRectangleSensor(171, 36, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP,0, SUBG_2), false);
-	lolipops[1] = aux2;
-	lolipops[1]->physBody->listener = this;
-	delete aux2;
-	lightsCombo* aux3 = new lightsCombo(App->physics->CreateRectangleSensor(199, 44, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP,0, SUBG_3), false);
-	lolipops[2] = aux3;
-	lolipops[2]->physBody->listener = this;
-	delete aux3;
+	lolipop1 = new lightsCombo(App->physics->CreateRectangleSensor(143, 28, 10, 10, COLLIDER_LOLIPOP, BALL, REGULAR_MAP, 0, SUBG_1), false);
+	lolipop1->physBody->listener = this;
+	lolipop2 = new lightsCombo(App->physics->CreateRectangleSensor(171, 36, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP, 0, SUBG_2), false);
+	lolipop2->physBody->listener = this;
+	lolipop3 = new lightsCombo(App->physics->CreateRectangleSensor(199, 44, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP, 0, SUBG_3), false);
+	lolipop3->physBody->listener = this;
 
 	//Physical Objects-----------------------------------
 
@@ -261,8 +257,12 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(map);
 	App->textures->Unload(graphics);
 
+	map = nullptr;
+	graphics = nullptr;
 
-	Mix_FadeOutMusic(200);
+	delete lolipop1;
+	delete lolipop2;
+	delete lolipop3;
 
 	return true;
 }
@@ -524,10 +524,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 		case SUBG_1:
 		{
-			if (!lolipops[0]->draw)
+			if (!lolipop1->draw)
 			{
 				points += 25;
-				lolipops[0]->draw = true;
+				lolipop1->draw = true;
 				if (!ComboLolipops())
 					App->audio->PlayFx(inComboFX);
 				else
@@ -537,10 +537,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			break;
 		case SUBG_2:
 		{
-			if (!lolipops[1]->draw)
+			if (!lolipop2->draw)
 			{
 				points += 25;
-				lolipops[1]->draw = true;
+				lolipop2->draw = true;
 				if (!ComboLolipops())
 					App->audio->PlayFx(inComboFX);
 				else
@@ -550,10 +550,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			break;	
 		case SUBG_3:
 		{
-			if (!lolipops[2]->draw)
+			if (!lolipop3->draw)
 			{
 				points += 25;
-				lolipops[2]->draw = true;
+				lolipop3->draw = true;
 				if (!ComboLolipops())
 					App->audio->PlayFx(inComboFX);
 				else
@@ -587,7 +587,7 @@ void ModuleSceneIntro::ComboEggs()
 //Combo: when you enter 2 specific teleportes, you get an extra life
 bool ModuleSceneIntro::ComboLolipops()
 {
-	if (lolipops[0]->draw && lolipops[1]->draw && lolipops[2]->draw)
+	if (lolipop1->draw && lolipop2->draw && lolipop3->draw)
 	{
 		App->audio->PlayFx(comboEndFX);
 		scoreMultiplier *= 2;
@@ -598,9 +598,9 @@ bool ModuleSceneIntro::ComboLolipops()
 
 void ModuleSceneIntro::ReSetCombos()
 {
-	lolipops[0]->draw = false;
-	lolipops[1]->draw = false;
-	lolipops[2]->draw = false;
+	lolipop1->draw = false;
+	lolipop2->draw = false;
+	lolipop3->draw = false;
 
 	egg1 = true;
 	egg2 = true;
@@ -613,6 +613,13 @@ void ModuleSceneIntro::mapBlit()
 
 	SDL_Rect background = { 1, 1, 256, 416 };
 	App->renderer->Blit(map, 0, 0, &background);
+	
+
+	// In-Game Animals--------------------------------------
+	App->renderer->Blit(graphics, 180, 335, &animalElephant.GetCurrentFrame());
+	App->renderer->Blit(graphics, 60, 345, &animalSquirrel.GetCurrentFrame(),1.0f,0,0,0,SDL_FLIP_HORIZONTAL);
+	App->renderer->Blit(graphics, 200, 195, &animalBird.GetCurrentFrame());
+
 
 	// Prepare for raycast ------------------------------------------------------
 
@@ -640,11 +647,11 @@ void ModuleSceneIntro::mapBlit()
 //Lolipops
 	SDL_Rect lolipop = { 370, 430, 9, 9 };
 
-	if (lolipops[0]->draw == true)
+	if (lolipop1->draw == true)
 		App->renderer->Blit(map, 141, 27, &lolipop);
-	if (lolipops[1]->draw == true)
+	if (lolipop2->draw == true)
 		App->renderer->Blit(map, 169, 35, &lolipop);
-	if (lolipops[2]->draw == true)
+	if (lolipop3->draw == true)
 		App->renderer->Blit(map, 197, 43, &lolipop);
 
 	//Ball in the background ------------------------------------------------------
@@ -681,6 +688,8 @@ void ModuleSceneIntro::mapBlit()
 	App->renderer->Blit(graphics, 160, 385, &pinkBunny.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
 	App->renderer->Blit(graphics, 195, 370, &blueCupoSleeping.GetCurrentFrame(), 1.0f, 0.0, 0, 0, SDL_FLIP_HORIZONTAL);
 	App->renderer->Blit(graphics, 180, 380, &blueCupoSit.GetCurrentFrame());
+
+	
 
 
 	//Map Rails ------------------------------------------------------
@@ -738,5 +747,6 @@ void ModuleSceneIntro::mapBlit()
 		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
 
 	}
+
 
 }

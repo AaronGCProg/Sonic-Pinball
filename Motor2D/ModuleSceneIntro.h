@@ -12,9 +12,7 @@ struct lightsCombo
 {
 	lightsCombo(PhysBody* body, bool drawing) : physBody(body), draw (drawing)
 	{};
-	lightsCombo(PhysBody* body) : physBody(body), draw(false)
-	{};
-	lightsCombo() {};
+
 	PhysBody* physBody;
 	bool draw = false;
 
@@ -61,7 +59,9 @@ public:
 	//Ball Shooter
 	b2PrismaticJoint* ballShooter;
 	//Lolipops
-	lightsCombo* lolipops[3] = {nullptr};
+	lightsCombo* lolipop1;
+	lightsCombo* lolipop2;
+	lightsCombo* lolipop3;
 
 
 	//Textures-------------------------------------
