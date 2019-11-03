@@ -12,7 +12,11 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void ReStartGame();
+	void MinusLife();
 
 public:
+
+	int lifes = 3;
 
 };

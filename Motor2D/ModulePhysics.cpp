@@ -152,6 +152,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, float bouncing, 
 
 	b2CircleShape shape;
 	shape.m_radius = PIXEL_TO_METERS(radius);
+
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;

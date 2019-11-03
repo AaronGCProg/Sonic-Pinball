@@ -27,7 +27,7 @@ public:
 public:
 
 	// Official 
-	p2List<PhysBody*> playerBall;
+	PhysBody* playerBall;
 	p2List<PhysBody*> map_col;
 	p2List<PhysBody*> bumpers;
 
@@ -85,5 +85,7 @@ public:
 private:
 
 	bool mapDebug = false;
+	bool reStart = false;
+
 
 };

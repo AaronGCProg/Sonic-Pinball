@@ -7,6 +7,8 @@
 #include "ModuleWindow.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
+
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -395,6 +397,8 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 90, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
+	App->physics->CreateRectangleSensor(250, 440, 500, 50, COLLIDER_DEATH, BALL, REGULAR_MAP);
+
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers2, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
@@ -439,6 +443,12 @@ bool ModuleSceneIntro::CleanUp()
 
 update_status ModuleSceneIntro::PreUpdate()
 {
+	if (reStart)
+	{
+		App->player->MinusLife();
+		App->player->ReStartGame();
+		reStart = false;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -462,44 +472,35 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	//Left Trigger
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		JleftFlipper->SetMotorSpeed(30);
 
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
 		JleftFlipper->SetMotorSpeed(-30);
 	}
 
 
 	//Right Trigger
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		JrightFlipper->SetMotorSpeed(-30);
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
 		JrightFlipper->SetMotorSpeed(30);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		ballShooter->SetMotorSpeed(1.0f);
+		ballShooter->SetMotorSpeed(40.0f);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
 		ballShooter->SetMotorSpeed(-40.0f);
 	}
-
-	
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		playerBall.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, 0.2f, false, COLLIDER_BALL, REGULAR_MAP, BALL));
-		playerBall.getLast()->data->listener = this;
-	}
-
-
 	
 
 	sprintf_s(actualScore_text, 10, "%7d", actualScore);
@@ -549,6 +550,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL, RAIL });
 	}
 
+	if (bodyB->colType == COLLIDER_DEATH)
+	{
+		reStart = true;
+
+	}
+
 		
 	actualScore += 10;
 	App->audio->PlayFx(bonus_fx);
@@ -571,42 +578,13 @@ void ModuleSceneIntro::mapBlit()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = playerBall.getFirst();
 
-	while (c != NULL && (c->data->body->GetFixtureList()->GetFilterData().categoryBits == BALL || c->data->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL))
+	if (playerBall != nullptr && (playerBall->body->GetFixtureList()->GetFilterData().categoryBits == BALL || playerBall->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL))
 	{
 		int x, y;
 		SDL_Rect ball = { 273, 405, 14, 14 };
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, c->data->GetRotation());
-
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if (ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if (hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
+		playerBall->GetPosition(x, y);
+		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
 	}
 
 	// ray -----------------
@@ -664,16 +642,13 @@ void ModuleSceneIntro::mapBlit()
 	SDL_Rect initialBouncer2 = { 351, 387, 23, 41 };
 	App->renderer->Blit(map, 153, 298, &initialBouncer2);
 
-	c = playerBall.getFirst();
-
-	while (c != NULL &&c->data->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL_ENTRANCE)
+	if (playerBall != nullptr && playerBall->body->GetFixtureList()->GetFilterData().categoryBits == RAIL_BALL_ENTRANCE)
 	{
 		int x, y;
 		SDL_Rect ball = { 273, 405, 14, 14 };
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, c->data->GetRotation());
+		playerBall->GetPosition(x, y);
+		App->renderer->Blit(map, x - 1, y - 1, &ball, 1.0f, playerBall->GetRotation());
 
-		c = c->next;
 	}
 
 }
