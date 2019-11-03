@@ -77,15 +77,13 @@ public:
 	uint bouncingBumperFX;
 	uint bouncingWallFX;
 	uint flippersFX;
+	uint boostFX;
 
 
 	p2Point<int> ray;
 	bool ray_on;
 
 
-	char actualScore_text[12];
-	int actualScore = 0;
-	int fontScore = -1;
 
 private:
 

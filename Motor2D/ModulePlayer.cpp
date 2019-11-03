@@ -9,6 +9,7 @@
 #include "ModuleWindow.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleRender.h"
 
 
 
@@ -27,6 +28,9 @@ bool ModulePlayer::Start()
 
 	App->scene_intro->playerBall = App->physics->CreateCircle(240, 382, 6, 0.2f, false, COLLIDER_BALL, REGULAR_MAP, BALL);
 	App->scene_intro->playerBall->listener = pointer;
+
+	fontScore = App->renderer->LoadFont("pinball/score.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 1);
+
 	
 	return true;
 }
@@ -36,12 +40,22 @@ bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
 
+	App->renderer->UnLoadFont(fontScore);
+
 	return true;
 }
 
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	//Ui quad
+	App->renderer->DrawQuad({ 0, 416, 256, 50 }, 0, 0, 0, 255);
+
+
+
+	sprintf_s(actualScore_text, 10, "%7d", actualScore);
+	App->renderer->BlitText((SCREEN_WIDTH / 2) - 15, 40, 0, actualScore_text);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -54,6 +68,11 @@ void ModulePlayer::MinusLife()
 
 }
 
+void ModulePlayer::AddScore(int score)
+{
+	actualScore += score;
+
+}
 
 void ModulePlayer::ReStartGame()
 {

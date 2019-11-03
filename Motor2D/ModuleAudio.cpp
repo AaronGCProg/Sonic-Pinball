@@ -44,6 +44,9 @@ bool ModuleAudio::Init()
 		ret = true;
 	}
 
+	//Volume control
+	Mix_VolumeMusic(20);
+
 	return ret;
 }
 

@@ -81,13 +81,16 @@ bool ModuleSceneIntro::Start()
 	// Game Graphic Resources
 	map = App->textures->Load("pinball/map_spritesheet.png");
 	graphics = App->textures->Load("pinball/general_spritesheet.png");
-	fontScore = App->renderer->LoadFont("pinball/score.png", "0123456789%,", 1);
 
 	// Game Audio Resources
 	bouncingBumperFX = App->audio->LoadFx("pinball/audio/bumperEffect.wav");
 	bouncingWallFX = App->audio->LoadFx("pinball/audio/bouncingWall2.wav");
 	startingRoundFX = App->audio->LoadFx("pinball/audio/startingRound.wav");
 	flippersFX = App->audio->LoadFx("pinball/audio/flipperEffect.wav");
+	boostFX = App->audio->LoadFx("pinball/audio/speedupBall.wav");
+	App->audio->PlayMusic("pinball/audio/ost/angel_island_loop.ogg");
+
+
 	
 
 
@@ -401,7 +404,7 @@ bool ModuleSceneIntro::Start()
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap1, 90, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 	map_col.add(App->physics->CreateChain(0, 0, genericColMap2, 18, true, COLLIDER_WALL, BALL, REGULAR_MAP));
 
-	App->physics->CreateRectangleSensor(250, 440, 500, 50, COLLIDER_DEATH, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(250, 460, 500, 50, COLLIDER_DEATH, BALL, REGULAR_MAP);
 
 	bumpers.add(App->physics->CreateChain(0, 0, initialBumpers1, 6, true, COLLIDER_BOUNCER, BALL, REGULAR_MAP));
 	bumpers.getLast()->data->listener = this;
@@ -440,7 +443,6 @@ bool ModuleSceneIntro::CleanUp()
 	LOG("Unloading Intro scene");
 	App->textures->Unload(map);
 	App->textures->Unload(graphics);
-	App->renderer->UnLoadFont(fontScore);
 
 	return true;
 }
@@ -503,20 +505,19 @@ update_status ModuleSceneIntro::Update()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
-		JrightFlipper->SetMotorSpeed(30);
+		JrightFlipper->SetMotorSpeed(30.0f);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		ballShooter->SetMotorSpeed(40.0f);
+		ballShooter->SetMotorSpeed(80.0f);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
 		ballShooter->SetMotorSpeed(-40.0f);
 	}	
 
-	sprintf_s(actualScore_text, 10, "%7d", actualScore);
-	App->renderer->BlitText((SCREEN_WIDTH / 2) - 15, 40, 0, actualScore_text);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -531,7 +532,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
 	if (bodyB->colType == COLLIDER_BOUNCER) {
-		bodyA->body->GetContactList()->contact->SetRestitution(1.6f);
+		bodyA->body->GetContactList()->contact->SetRestitution(1.3f);
 		App->audio->PlayFx(bouncingBumperFX);
 	}
 		
@@ -553,11 +554,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		int speedX = 0;
 		bodyA->body->GetFixtureList()->SetFilterData({ RAIL_BALL_ENTRANCE, RAIL_ENTRANCE });
 		if (bodyA->body->GetPosition().x < bodyA->body->GetWorldCenter().x)
-			 speedX = -10;
+			 speedX = -5;
 		else
-			speedX = 10;
+			speedX = 5;
 
-		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -15));
+		App->audio->PlayFx(boostFX);
+
+
+		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
 	}
 
 	else if (bodyB->colType == COLLIDER_ENTRANCETORAIL)
@@ -568,9 +572,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyB->colType == COLLIDER_DEATH)
 	{
 		reStart = true;
-
 	}
-
 
 	else 
 	{
@@ -578,7 +580,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 
 		
-	actualScore += 10;
+	App->player->AddScore(10);
 	
 	
 }

@@ -14,9 +14,15 @@ public:
 	bool CleanUp();
 	void ReStartGame();
 	void MinusLife();
+	void AddScore(int scoreas);
+
 
 public:
 
 	int lifes = 3;
+
+	char actualScore_text[12];
+	int actualScore = 0;
+	int fontScore = -1;
 
 };
