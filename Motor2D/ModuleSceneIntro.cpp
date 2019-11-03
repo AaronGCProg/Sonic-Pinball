@@ -466,6 +466,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
+		break;
 	}
 
 	case COLLIDER_EGG_2: //When the ball enters the second teleporter
@@ -478,6 +479,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
+		break;
 	}
 
 	case COLLIDER_LAUNCHER: //checks if the player is ready to launch
@@ -500,6 +502,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_WALL:
 	{
 		App->audio->PlayFx(bouncingWallFX);
+		break;
 	}
 	}
 
@@ -592,9 +595,15 @@ void ModuleSceneIntro::mapBlit()
 	//Eggs ------------------------------------------------------
 	SDL_Rect egg = { 517, 152, 26, 31 };
 	if(egg1)
-	App->renderer->Blit(graphics, 80, 130, &egg);
+		App->renderer->Blit(graphics, 80, 130, &egg);
+	else
+		App->renderer->Blit(graphics, 80, 130, &blueCupoSleeping.GetCurrentFrame());
+
 	if(egg2)
 	App->renderer->Blit(graphics, 70, 110, &egg);
+	else
+		App->renderer->Blit(graphics, 70, 110, &blueCupoSit.GetCurrentFrame());
+
 
 
 

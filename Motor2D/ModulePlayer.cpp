@@ -193,7 +193,6 @@ void ModulePlayer::BallRePos()
 	filter.maskBits = REGULAR_MAP;
 	App->scene_intro->playerBall->body->GetFixtureList()->SetFilterData(filter);
 
-
 }
 
 
@@ -203,6 +202,7 @@ bool ModulePlayer::ReStartGame()
 	{
 		RoundEnd();
 		actualRound++;
+		lifes = 3;
 		return true;
 	}
 
