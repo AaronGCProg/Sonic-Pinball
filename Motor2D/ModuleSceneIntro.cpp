@@ -434,7 +434,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		//Calculate it's boost depending on it's speed in entering
 		int speedX = 0;
-		if (bodyA->body->GetPosition().x < PIXEL_TO_METERS(SCREEN_WIDTH/4))
+		if (bodyA->body->GetPosition().x < PIXEL_TO_METERS(SCREEN_WIDTH / 4))
 			speedX = 5;
 		else
 			speedX = 5;
@@ -567,7 +567,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_WALL:
 	{
 		App->audio->PlayFx(bouncingWallFX);
-		points += 1;
 		break;
 	}
 	}
