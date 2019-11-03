@@ -38,6 +38,18 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX
 };
 
+//Enum to Control Lights in the Map
+enum subgroup
+{
+	SUBG_NONE = 0,
+	SUBG_1,
+	SUBG_2,
+	SUBG_3,
+	SUBG_4,
+
+	SUBGROUP_MAX
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -54,6 +66,7 @@ public:
 	int width, height;
 	b2Body* body;
 	COLLIDER_TYPE colType = COLLIDER_GENERAL;
+	subgroup subG = SUBG_NONE;
 	Module* listener;
 
 };
@@ -75,12 +88,13 @@ public:
 	//Physical objects creation---------------------
 	PhysBody* CreateCircle(int x, int y, int radius, float bouncing, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0, subgroup subgr = SUBG_NONE);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool staticObject = false, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	PhysBody* CreateFlipper(int x, int y, flipper_direction dir, b2Vec2 mesure, COLLIDER_TYPE colType = COLLIDER_GENERAL, uint16 mask = 0x0016, uint16 cat = 0x0016, int groupIndex = 0);
 	b2PrismaticJoint* CreateBallShooter(int x, int y, int w, int h, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex = 1);
 
 	//Joints List---------------
+	void checkMouseJoint();
 	p2List<b2RevoluteJoint*> flipperJoints;
 	b2MouseJoint* mouse_joint;
 

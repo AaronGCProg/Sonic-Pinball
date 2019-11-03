@@ -205,7 +205,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, bo
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, COLLIDER_TYPE colType, uint16 mask, uint16 cat, int groupIndex, subgroup subgr)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -231,6 +231,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	pbody->width = width;
 	pbody->height = height;
 	pbody->colType = colType;
+	pbody->subG = subgr;
 
 	return pbody;
 }
@@ -366,7 +367,7 @@ update_status ModulePhysics::PostUpdate()
 
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
-				if (f->TestPoint(mouse_position))
+				if (f->TestPoint(mouse_position) && f->GetType() == b2Shape::e_circle)
 				{
 					b2MouseJointDef def;
 					def.bodyA = ground;
@@ -393,10 +394,29 @@ update_status ModulePhysics::PostUpdate()
 			mouse_joint = nullptr;
 			mouseJointBody = nullptr;
 		}
+		checkMouseJoint();
+
 
 	return UPDATE_CONTINUE;
 }
 
+void ModulePhysics::checkMouseJoint()
+{
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && mouse_joint != nullptr && mouseJointBody != nullptr)
+	{
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
+		mouseJointBody = nullptr;
+
+	}
+
+	if (!debug && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint != nullptr && mouseJointBody != nullptr)
+	{
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
+		mouseJointBody = nullptr;
+	}
+}
 
 // Called before quitting
 bool ModulePhysics::CleanUp()

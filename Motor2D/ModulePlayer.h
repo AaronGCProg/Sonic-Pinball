@@ -17,7 +17,6 @@ public:
 	bool ReStartGame();
 	void RoundEnd();
 	void BallRePos();
-	void ReSetMap();
 
 	//Score---------------------------
 	void AdjustLife(int life);

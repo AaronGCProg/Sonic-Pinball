@@ -144,6 +144,9 @@ bool ModuleSceneIntro::Start()
 	ballDisapearFX = App->audio->LoadFx("pinball/audio/doorEffect3.wav");
 	lifeWonFX = App->audio->LoadFx("pinball/audio/highScoreEffect1.wav");
 	ballShooterFX = App->audio->LoadFx("pinball/audio/launchingBall3.wav");
+	comboEndFX = App->audio->LoadFx("pinball/audio/optionNotAllowed.wav");
+	inComboFX = App->audio->LoadFx("pinball/audio/optionNotAllowed2.wav");
+
 
 	// Game Music
 	App->audio->PlayMusic("pinball/audio/ost/angel_island_loop.ogg");
@@ -201,10 +204,18 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRectangleSensor(221, 14, 15, 15, COLLIDER_EGG_NONE, BALL, REGULAR_MAP);
 
 	//Lolipop Sensors
-	App->physics->CreateRectangleSensor(143, 29, 10, 10, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
-	App->physics->CreateRectangleSensor(172, 37, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
-	App->physics->CreateRectangleSensor(200, 45, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP);
-
+	lightsCombo* aux = new lightsCombo(App->physics->CreateRectangleSensor(143, 28, 10, 10, COLLIDER_LOLIPOP, BALL, REGULAR_MAP, 0,SUBG_1),false);
+	lolipops[0] = aux;
+	lolipops[0]->physBody->listener = this;
+	delete aux;
+	lightsCombo* aux2 = new lightsCombo(App->physics->CreateRectangleSensor(171, 36, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP,0, SUBG_2), false);
+	lolipops[1] = aux2;
+	lolipops[1]->physBody->listener = this;
+	delete aux2;
+	lightsCombo* aux3 = new lightsCombo(App->physics->CreateRectangleSensor(199, 44, 15, 15, COLLIDER_LOLIPOP, BALL, REGULAR_MAP,0, SUBG_3), false);
+	lolipops[2] = aux3;
+	lolipops[2]->physBody->listener = this;
+	delete aux3;
 
 	//Physical Objects-----------------------------------
 
@@ -296,7 +307,10 @@ void ModuleSceneIntro::DebugInputs()
 {
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
 		App->physics->debug = !App->physics->debug;
+		App->physics->checkMouseJoint();
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		mapDebug = !mapDebug;
@@ -386,13 +400,14 @@ void ModuleSceneIntro::Disapearing()
 //Controls the map collision
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+	int points = 0;
 	switch (bodyB->colType)
 	{
 	case COLLIDER_BOUNCER: //when the ball hits a bouncer
 	{
 		bodyA->body->GetContactList()->contact->SetRestitution(1.3f);
 		App->audio->PlayFx(bouncingBumperFX);
-		App->player->AddScore(35);
+		points += 35;
 		break;
 	}
 	case COLLIDER_BALLTORAIL: //when the ball enters a rail
@@ -421,7 +436,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else
 			speedX = 5;
 
-		App->player->AddScore(25);
+		points += 25;
 		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
 		break;
 	}
@@ -438,7 +453,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		App->audio->PlayFx(boostFX);
 
-		App->player->AddScore(25);
+		points += 25;
 		bodyA->body->SetLinearVelocity(b2Vec2(speedX, -10));
 		break;
 	}
@@ -462,7 +477,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			egg1 = false;
 			ComboEggs();
-			App->player->AddScore(50);
+			points += 50;
 		}
 		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
@@ -475,7 +490,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			egg2 = false;
 			ComboEggs();
-			App->player->AddScore(50);
+			points += 50;
 		}
 		App->particles->AddParticle(App->particles->smoke, METERS_TO_PIXELS(bodyA->body->GetPosition().x), METERS_TO_PIXELS(bodyA->body->GetPosition().y));
 		disapear = true;
@@ -496,16 +511,63 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case COLLIDER_EGG_NONE: //Teleport from the tunels that don't have an egg asigned
 	{
 		disapear = true;
-		App->player->AddScore(25);
+		points += 25;
+		break;
+	}
+	case COLLIDER_LOLIPOP: //Teleport from the tunels that don't have an egg asigned
+	{
+		switch (bodyB->subG) 
+		{
+		case SUBG_1:
+		{
+			if (!lolipops[0]->draw)
+			{
+				points += 25;
+				lolipops[0]->draw = true;
+				if (!ComboLolipops())
+					App->audio->PlayFx(inComboFX);
+				else
+					points += 100;
+			}
+		}
+			break;
+		case SUBG_2:
+		{
+			if (!lolipops[1]->draw)
+			{
+				points += 25;
+				lolipops[1]->draw = true;
+				if (!ComboLolipops())
+					App->audio->PlayFx(inComboFX);
+				else
+					points += 100;
+			}
+		}
+			break;	
+		case SUBG_3:
+		{
+			if (!lolipops[2]->draw)
+			{
+				points += 25;
+				lolipops[2]->draw = true;
+				if (!ComboLolipops())
+					App->audio->PlayFx(inComboFX);
+				else
+					points += 100;
+			}
+			break;
+		}
+		}
 		break;
 	}
 	case COLLIDER_WALL:
 	{
 		App->audio->PlayFx(bouncingWallFX);
+		points += 1;
 		break;
 	}
 	}
-
+	App->player->AddScore(points* scoreMultiplier);
 }
 
 //Combo: when you enter 2 specific teleportes, you get an extra life
@@ -517,6 +579,29 @@ void ModuleSceneIntro::ComboEggs()
 		App->audio->PlayFx(lifeWonFX);
 		App->player->AddScore(100);
 	}
+}
+
+//Combo: when you enter 2 specific teleportes, you get an extra life
+bool ModuleSceneIntro::ComboLolipops()
+{
+	if (lolipops[0]->draw && lolipops[1]->draw && lolipops[2]->draw)
+	{
+		App->audio->PlayFx(comboEndFX);
+		scoreMultiplier *= 2;
+		return true;
+	}
+	return false;
+}
+
+void ModuleSceneIntro::ReSetCombos()
+{
+	lolipops[0]->draw = false;
+	lolipops[1]->draw = false;
+	lolipops[2]->draw = false;
+
+	egg1 = true;
+	egg2 = true;
+
 }
 
 void ModuleSceneIntro::mapBlit() 
@@ -547,6 +632,17 @@ void ModuleSceneIntro::mapBlit()
 		if (normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+	//Map Lights----------------------------------------------
+//Lolipops
+	SDL_Rect lolipop = { 370, 430, 9, 9 };
+
+	if (lolipops[0]->draw == true)
+		App->renderer->Blit(map, 141, 27, &lolipop);
+	if (lolipops[1]->draw == true)
+		App->renderer->Blit(map, 169, 35, &lolipop);
+	if (lolipops[2]->draw == true)
+		App->renderer->Blit(map, 197, 43, &lolipop);
 
 	//Ball in the background ------------------------------------------------------
 
@@ -603,7 +699,6 @@ void ModuleSceneIntro::mapBlit()
 	App->renderer->Blit(graphics, 70, 110, &egg);
 	else
 		App->renderer->Blit(graphics, 70, 110, &blueCupoSit.GetCurrentFrame());
-
 
 
 

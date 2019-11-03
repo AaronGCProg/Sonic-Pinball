@@ -119,6 +119,11 @@ void ModulePlayer::DrawUI()
 	sprintf_s(Score_text, 10, "%7d", lifes);
 	App->renderer->BlitText(SCREEN_WIDTH - 90, 448, 0, Score_text);
 
+	//Multiplier
+	App->renderer->BlitText(SCREEN_WIDTH - 95, 448, 0, "X");
+	sprintf_s(Score_text, 10, "%7d", App->scene_intro->scoreMultiplier);
+	App->renderer->BlitText(SCREEN_WIDTH - 133, 448, 0, Score_text);
+
 	//Round number
 	App->renderer->BlitText(37, 448, 0, "ROUND");
 	sprintf_s(Score_text, 10, "%7d", actualRound);
@@ -172,16 +177,6 @@ void ModulePlayer::RoundEnd()
 	}
 }
 
-void ModulePlayer::ReSetMap() 
-{
-	lifes = 3;
-
-	App->scene_intro->egg1 = true;
-	App->scene_intro->egg2 = true;
-
-
-}
-
 void ModulePlayer::BallRePos()
 {
 	App->scene_intro->playerBall->body->SetTransform({ PIXEL_TO_METERS(240),PIXEL_TO_METERS(382) }, 0.0f);
@@ -208,6 +203,8 @@ bool ModulePlayer::ReStartGame()
 
 	BallRePos();
 
+	App->scene_intro->scoreMultiplier = 1;
+	App->scene_intro->ReSetCombos();
 	UpdateScore();
 	ReSetScore();
 

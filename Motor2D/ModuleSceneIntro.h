@@ -7,6 +7,19 @@
 
 class PhysBody;
 
+//Struct to store the combos
+struct lightsCombo
+{
+	lightsCombo(PhysBody* body, bool drawing) : physBody(body), draw (drawing)
+	{};
+	lightsCombo(PhysBody* body) : physBody(body), draw(false)
+	{};
+	lightsCombo() {};
+	PhysBody* physBody;
+	bool draw = false;
+
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -26,6 +39,8 @@ public:
 	void DebugInputs();
 	void PlayerInputs();
 	void ComboEggs();
+	bool ComboLolipops();
+	void ReSetCombos();
 	
 
 public:
@@ -45,6 +60,8 @@ public:
 	b2RevoluteJoint* JrightFlipper;
 	//Ball Shooter
 	b2PrismaticJoint* ballShooter;
+	//Lolipops
+	lightsCombo* lolipops[3] = {nullptr};
 
 
 	//Textures-------------------------------------
@@ -90,10 +107,11 @@ public:
 	uint ballDisapearFX = 0u;
 	uint lifeWonFX = 0u;
 	uint ballShooterFX = 0u;
+	uint comboEndFX = 0u;
+	uint inComboFX = 0u;
 
 	//Map Control----------------------------
-	bool egg1 = true;
-	bool egg2 = true;
+	int scoreMultiplier = 1;
 
 
 	//Ray-------------------------------------
@@ -108,6 +126,8 @@ private:
 	bool reStart = false;
 	bool disapear = false;
 	bool launcheable = false;
+	bool egg1 = true;
+	bool egg2 = true;
 	uint disapearTimer = 0u;
 	b2Vec2 disapearCoords = { 0,0 };
 
