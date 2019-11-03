@@ -197,6 +197,9 @@ bool ModulePlayer::ReStartGame()
 	{
 		RoundEnd();
 		actualRound++;
+		UpdateScore();
+		ReSetScore();
+
 		lifes = 3;
 		return true;
 	}
@@ -205,9 +208,6 @@ bool ModulePlayer::ReStartGame()
 
 	App->scene_intro->scoreMultiplier = 1;
 	App->scene_intro->ReSetCombos();
-	UpdateScore();
-	ReSetScore();
 
 	return true;
-
 }
