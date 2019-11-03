@@ -28,6 +28,19 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	mapMonitor.PushBack({ 52, 509, 48, 55 });
 	mapMonitor.speed = 0.15f;
 
+	eggCupo.PushBack({ 496, 164, 7, 7 });
+	eggCupo.PushBack({ 517, 152, 26, 31 });
+	eggCupo.PushBack({ 546, 150, 21, 31 });
+	eggCupo.PushBack({ 570, 148, 22, 32 });
+	eggCupo.PushBack({ 595, 147, 22, 33 });
+	eggCupo.PushBack({ 620, 147, 20, 33 });
+	eggCupo.PushBack({ 595, 147, 22, 33 });
+	eggCupo.PushBack({ 620, 147, 20, 33 });
+	eggCupo.PushBack({ 643, 151, 19, 28 });
+	eggCupo.PushBack({ 665, 149, 18, 29 });
+	eggCupo.PushBack({ 686, 146, 20, 33 });
+	eggCupo.speed = 0.15f;
+
 	brownBambi.PushBack({ 551, 439, 22, 30 });
 	brownBambi.PushBack({ 576, 439, 20, 30 });
 	brownBambi.PushBack({ 599, 441, 22, 28 });
@@ -64,6 +77,37 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	blueCupoSleeping.PushBack({ 671, 108, 26, 29 });
 	blueCupoSleeping.PushBack({ 700, 108, 26, 29 });
 	blueCupoSleeping.speed = 0.01f;
+
+	monsterFrog.PushBack({ 17, 380, 14, 12 });
+	monsterFrog.PushBack({ 34, 379, 13, 13 });
+	monsterFrog.PushBack({ 50, 374, 16, 18 });
+	monsterFrog.PushBack({ 69, 375, 19, 14 });
+	monsterFrog.speed = 0.10f;
+
+	monsterCrap.PushBack({ 95, 375, 21, 17 });
+	monsterCrap.PushBack({ 120, 374, 21, 18 });
+	monsterCrap.PushBack({ 145, 375, 21, 17 });
+	monsterCrap.speed = 0.10f;
+
+	monsterBat.PushBack({ 263, 374, 26, 20 });
+	monsterBat.PushBack({ 292, 377, 24, 17 });
+	monsterBat.PushBack({ 319, 377, 20, 17 });
+	monsterBat.speed = 0.10f;
+
+	animalBird.PushBack({ 259, 405, 15, 11 });
+	animalBird.PushBack({ 277, 405, 15, 10 });
+	animalBird.PushBack({ 295, 405, 15, 10 });
+	animalBird.speed = 0.10f;
+
+	animalSquirrel.PushBack({ 7, 402, 12, 15 });
+	animalSquirrel.PushBack({ 23, 403, 12, 14 });
+	animalSquirrel.PushBack({ 39, 402, 11, 15 });
+	animalSquirrel.speed = 0.10f;
+
+	animalElephant.PushBack({ 106, 403, 15, 14 });
+	animalElephant.PushBack({ 124, 403, 13, 14 });
+	animalElephant.PushBack({ 141, 403, 11, 14 });
+	animalElephant.speed = 0.10f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
