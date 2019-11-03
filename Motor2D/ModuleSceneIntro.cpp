@@ -181,7 +181,9 @@ bool ModuleSceneIntro::Start()
 
 	//Left Rail
 	map_col.add(App->physics->CreateChain(0, 0, map_rail_left, 64, true, COLLIDER_WALL, RAIL_BALL, RAIL));
-	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCETORAIL, BALL, REGULAR_MAP);
+	map_col.add(App->physics->CreateChain(0, 0, left_rail_entrance, 36, true, COLLIDER_WALL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE));
+	App->physics->CreateRectangleSensor(43, 120, 5, 5, COLLIDER_BALLTOENTRANCE, BALL, REGULAR_MAP);
+	App->physics->CreateRectangleSensor(4, 40, 5, 5, COLLIDER_ENTRANCETORAIL, RAIL_BALL_ENTRANCE, RAIL_ENTRANCE);
 	App->physics->CreateRectangleSensor(42, 312, 5, 5, COLLIDER_RAILTOBALL, RAIL_BALL, RAIL);
 
 
